@@ -41,6 +41,7 @@ namespace LojaVeiculos.Models
         [Required]
         public string CodSeguranca { get; set; }
 
+
         [ForeignKey("Cliente")]
         public int IdCliente { get; set; }
 

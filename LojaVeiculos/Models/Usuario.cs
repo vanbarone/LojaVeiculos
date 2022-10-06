@@ -18,21 +18,26 @@ namespace LojaVeiculos.Models
         [StringLength(60)]
         public string Sobrenome { get; set; }
 
-        [Required,StringLength(11)]
+        [Required]
+        [StringLength(15)]
         public string CPF { get; set; }
 
+        [Required]
+        [StringLength(20)]
         public string Celular { get; set; }
 
         [Required(ErrorMessage = "Informe seu email")]
+        [StringLength(255)]
         [RegularExpression(".+\\@.+\\..+", ErrorMessage = "Informe um email válido...")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Informe sua senha")]
+        [StringLength(10)]
         [MinLength(4)]
         public string Senha { get; set; }
 
         [ForeignKey("TipoUsuario")]
-        public int? IdTipoUsuario { get; set; }
+        public int IdTipoUsuario { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         public TipoUsuario TipoUsuario { get; set; }

@@ -12,16 +12,18 @@ namespace LojaVeiculos.Models
         public int Id { get; set; }
 
         [Required]
-        public bool TermoUso { get; set; }
+        public bool AceitaTermoUso { get; set; }
 
 
+        [Required]
         [ForeignKey("Usuario")]
         public int IdUsuario { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         public Usuario Usuario { get; set; }
 
-        public ICollection<Cartao> Cartoes { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        public ICollection<Cartao> Cartoes { get; set; }
     }
 }

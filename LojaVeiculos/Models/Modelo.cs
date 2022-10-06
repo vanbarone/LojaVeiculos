@@ -12,8 +12,12 @@ namespace LojaVeiculos.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
+        [StringLength(30)]
         public string NomeModelo { get; set; }
 
+        [Required]
+        [StringLength(30)]
         public string Categoria { get; set; }
 
         [ForeignKey("Marca")]
@@ -23,6 +27,6 @@ namespace LojaVeiculos.Models
         public Marca Marca;
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public ICollection<Veiculo> Veiculos;
+        public ICollection<Veiculo> Veiculos { get; set; }
     }
 }

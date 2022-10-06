@@ -1,8 +1,11 @@
-﻿namespace LojaVeiculos.Models
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
+namespace LojaVeiculos.Models
 {
     public class Veiculo
     {
-        //PrimaryKey
+        [Key]
         public int Id { get; set; }
 
         public string Placa { get; set; }
@@ -13,8 +16,10 @@
 
         public TipodeCombustivel tipo { get; set; }
 
-        //Foreing Key´s
+        [ForeignKey("Concessionaria")]
         public int IdConcessionaria { get; set; }
+
+        [ForeignKey("Modelo")]
         public int IdModelo { get; set; }
 
         public Status status { get; set; }

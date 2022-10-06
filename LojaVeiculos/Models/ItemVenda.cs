@@ -10,20 +10,20 @@ namespace LojaVeiculos.Models
     {
         [Key]
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]     //não mostra esse campo no json na inserção e alteração
-        public int Id;
+        public int Id { get; set; }
 
         [Required]
         [ForeignKey("Veiculo")]
-        public int IdVeiculo;
+        public int IdVeiculo { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public Veiculo veiculo;
+        public Veiculo veiculo { get; set; }
 
         [Required]
         [ForeignKey("Venda")]
-        public int IdVenda;
+        public int IdVenda { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public Venda venda;
+        public Venda venda { get; set; }
     }
 }

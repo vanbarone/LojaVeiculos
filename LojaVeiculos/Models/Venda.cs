@@ -12,28 +12,34 @@ namespace LojaVeiculos.Models
     {
         [Key]
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]     //não mostra esse campo no json na inserção e alteração
-        public int Id;
+        public int Id { get; set; }
 
         [Required]
-        public DateTime Data;
+        public DateTime Data { get; set; }
 
         [Column(TypeName = "decimal(10,2)")]
-        public decimal VlTotal;
+        public decimal VlTotal { get; set; }
 
-        public VendaEnum.FormaPagto FormaPagto;
+        public VendaEnum.FormaPagto FormaPagto { get; set; }
 
         [Required]
+        [StringLength(255)]
         public string CartaoTitular { get; set; }
 
+
         [Required(ErrorMessage = "Insira o numero do cartao")]
+        [StringLength(20)]
         //[RegularExpression("4[0-9]{12}(?:[0-9]{3})", ErrorMessage = "Insira um numero valido")]
         public string CartaoNumero { get; set; }
 
+
         [Required]
+        [StringLength(20)]
         public string CartaoBandeira { get; set; }
 
 
         [Required]
+        [StringLength(15)]
         public string CartaoCpf { get; set; }
 
 
@@ -42,21 +48,21 @@ namespace LojaVeiculos.Models
 
 
         [Required]
-        public string CartaoAnoVencimento { get; set; }
+        public int CartaoAnoVencimento { get; set; }
 
 
         [Required]
-        public string CartaoCodSeguranca { get; set; }
+        public int CartaoCodSeguranca { get; set; }
 
 
         [Required]
-        public int IdCliente;
+        [ForeignKey("Cliente")]
+        public int IdCliente { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        [ForeignKey("Cliente")]
-        public Cliente cliente;
+        public Cliente Cliente { get; set; }
 
-        [ForeignKey("ItemVenda")]
-        public ICollection<ItemVenda> itemVenda;
+
+        public ICollection<ItemVenda> ItensVenda { get; set; }
     }
 }

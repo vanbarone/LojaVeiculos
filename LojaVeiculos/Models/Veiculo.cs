@@ -10,42 +10,46 @@ namespace LojaVeiculos.Models
     {
         [Key]
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]     //não mostra esse campo no json na inserção e alteração
-        public int Id;
+        public int Id { get; set; }
 
         [StringLength(7)]
-        public string Placa;
+        public string Placa { get; set; }
 
         [Required]
-        public int Ano;
+        public int Ano { get; set; }
 
         [Required]
-        public VeiculoEnum.Cor Cor;
+        [StringLength(30)]
+        public VeiculoEnum.Cor Cor { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(10,1)")]
-        public decimal Km;
+        public decimal Km { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(10,2)")]
-        public decimal Valor;
+        public decimal Valor { get; set; }
 
         [Required]
-        public VeiculoEnum.TpCombustivel TpCombustivel;
+        [StringLength(30)]
+        public VeiculoEnum.TpCombustivel TpCombustivel { get; set; }
 
-        public VeiculoEnum.Status Status;
+        [Required]
+        [StringLength(30)]
+        public VeiculoEnum.Status Status { get; set; }
 
         [Required]
         [ForeignKey("Concessionaria")]
-        public int IdConcessionaria;
+        public int IdConcessionaria { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public Concessionaria concessionaria;
+        public Concessionaria concessionaria { get; set; }
 
         [Required]
         [ForeignKey("Modelo")]
-        public int IdModelo;
+        public int IdModelo { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public Modelo modelo;
+        public Modelo Modelo { get; set; }
     }
 }

@@ -10,17 +10,16 @@ namespace LojaVeiculos.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
+        public string Apelido { get; set; }
+
         [Required(ErrorMessage = "Insira o nome do titular")]
         public string Titular { get; set; }
 
 
         [Required(ErrorMessage = "Insira o numero do cartao")]
-        [RegularExpression("4[0-9]{12}(?:[0-9]{3})", ErrorMessage = "Insira um numero valido")]
+        //[RegularExpression("4[0-9]{12}(?:[0-9]{3})", ErrorMessage = "Insira um numero valido")]
         public string Numero { get; set; }
-
-
-        [Required]
-        public string Apelido { get; set; }
 
 
         [Required]

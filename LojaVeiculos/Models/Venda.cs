@@ -25,9 +25,8 @@ namespace LojaVeiculos.Models
         [Required]
         public string CartaoTitular { get; set; }
 
-
         [Required(ErrorMessage = "Insira o numero do cartao")]
-        [RegularExpression("4[0-9]{12}(?:[0-9]{3})", ErrorMessage = "Insira um numero valido")]
+        //[RegularExpression("4[0-9]{12}(?:[0-9]{3})", ErrorMessage = "Insira um numero valido")]
         public string CartaoNumero { get; set; }
 
         [Required]

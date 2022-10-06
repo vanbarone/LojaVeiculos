@@ -6,6 +6,8 @@ namespace LojaVeiculos.Models
 {
     public class Usuario
     {
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        [Key]
         public int Id { get; set; }
 
         [Required]
@@ -16,6 +18,7 @@ namespace LojaVeiculos.Models
         [StringLength(60)]
         public string Sobrenome { get; set; }
 
+        [Required,StringLength(11)]
         public string CPF { get; set; }
 
         public string Celular { get; set; }
@@ -30,7 +33,8 @@ namespace LojaVeiculos.Models
 
         [ForeignKey("TipoUsuario")]
         public int? IdTipoUsuario { get; set; }
-        public TipoUsuario TipoUsuario { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        public TipoUsuario TipoUsuario { get; set; }
     }
 }

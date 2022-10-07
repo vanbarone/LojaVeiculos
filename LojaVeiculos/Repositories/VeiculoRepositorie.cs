@@ -32,7 +32,7 @@ namespace LojaVeiculos.Repositories
         {
             return ctx.Veiculo
                             .Include(c => c.Concessionaria)
-                            .Include(m => m.Modelo)//.ThenInclude(a => a.Marca)
+                            .Include(m => m.Modelo).ThenInclude(a => a.Marca)
                             .ToList();
         }
 
@@ -40,7 +40,7 @@ namespace LojaVeiculos.Repositories
         {
             return ctx.Veiculo
                             .Include(c => c.Concessionaria)
-                            .Include(m => m.Modelo)//.ThenInclude(a => a.Marca)
+                            .Include(m => m.Modelo).ThenInclude(a => a.Marca)
                             .FirstOrDefault(v => v.Id == id);
         }
 

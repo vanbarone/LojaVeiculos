@@ -142,17 +142,11 @@ namespace LojaVeiculos.Migrations
                     b.Property<int>("IdVenda")
                         .HasColumnType("int");
 
-                    b.Property<int?>("veiculoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("vendaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("veiculoId");
+                    b.HasIndex("IdVeiculo");
 
-                    b.HasIndex("vendaId");
+                    b.HasIndex("IdVenda");
 
                     b.ToTable("ItemVenda");
                 });
@@ -181,7 +175,12 @@ namespace LojaVeiculos.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Categoria")
+                    b.Property<string>("Cambio")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Carroceria")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
@@ -189,17 +188,27 @@ namespace LojaVeiculos.Migrations
                     b.Property<int>("IdMarca")
                         .HasColumnType("int");
 
-                    b.Property<int?>("MarcaId")
+                    b.Property<string>("Motor")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
+
+                    b.Property<int>("QtdePortas")
                         .HasColumnType("int");
 
-                    b.Property<string>("NomeModelo")
+                    b.Property<string>("TbCombustivel")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MarcaId");
+                    b.HasIndex("IdMarca");
 
                     b.ToTable("Modelo");
                 });
@@ -278,9 +287,10 @@ namespace LojaVeiculos.Migrations
                     b.Property<int>("Ano")
                         .HasColumnType("int");
 
-                    b.Property<int>("Cor")
+                    b.Property<string>("Cor")
+                        .IsRequired()
                         .HasMaxLength(30)
-                        .HasColumnType("int");
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<int>("IdConcessionaria")
                         .HasColumnType("int");
@@ -296,24 +306,16 @@ namespace LojaVeiculos.Migrations
                         .HasColumnType("nvarchar(7)");
 
                     b.Property<int>("Status")
-                        .HasMaxLength(30)
-                        .HasColumnType("int");
-
-                    b.Property<int>("TpCombustivel")
-                        .HasMaxLength(30)
                         .HasColumnType("int");
 
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(10,2)");
 
-                    b.Property<int?>("concessionariaId")
-                        .HasColumnType("int");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("IdModelo");
+                    b.HasIndex("IdConcessionaria");
 
-                    b.HasIndex("concessionariaId");
+                    b.HasIndex("IdModelo");
 
                     b.ToTable("Veiculo");
                 });
@@ -397,24 +399,32 @@ namespace LojaVeiculos.Migrations
 
             modelBuilder.Entity("LojaVeiculos.Models.ItemVenda", b =>
                 {
-                    b.HasOne("LojaVeiculos.Models.Veiculo", "veiculo")
+                    b.HasOne("LojaVeiculos.Models.Veiculo", "Veiculo")
                         .WithMany()
-                        .HasForeignKey("veiculoId");
+                        .HasForeignKey("IdVeiculo")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.HasOne("LojaVeiculos.Models.Venda", "venda")
+                    b.HasOne("LojaVeiculos.Models.Venda", "Venda")
                         .WithMany("ItensVenda")
-                        .HasForeignKey("vendaId");
+                        .HasForeignKey("IdVenda")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
-                    b.Navigation("veiculo");
+                    b.Navigation("Veiculo");
 
-                    b.Navigation("venda");
+                    b.Navigation("Venda");
                 });
 
             modelBuilder.Entity("LojaVeiculos.Models.Modelo", b =>
                 {
-                    b.HasOne("LojaVeiculos.Models.Marca", null)
+                    b.HasOne("LojaVeiculos.Models.Marca", "Marca")
                         .WithMany("Modelos")
-                        .HasForeignKey("MarcaId");
+                        .HasForeignKey("IdMarca")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Marca");
                 });
 
             modelBuilder.Entity("LojaVeiculos.Models.Usuario", b =>
@@ -430,17 +440,19 @@ namespace LojaVeiculos.Migrations
 
             modelBuilder.Entity("LojaVeiculos.Models.Veiculo", b =>
                 {
+                    b.HasOne("LojaVeiculos.Models.Concessionaria", "Concessionaria")
+                        .WithMany("Veiculos")
+                        .HasForeignKey("IdConcessionaria")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LojaVeiculos.Models.Modelo", "Modelo")
                         .WithMany("Veiculos")
                         .HasForeignKey("IdModelo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LojaVeiculos.Models.Concessionaria", "concessionaria")
-                        .WithMany("Veiculos")
-                        .HasForeignKey("concessionariaId");
-
-                    b.Navigation("concessionaria");
+                    b.Navigation("Concessionaria");
 
                     b.Navigation("Modelo");
                 });

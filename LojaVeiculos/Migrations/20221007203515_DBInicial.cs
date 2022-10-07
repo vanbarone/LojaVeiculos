@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace LojaVeiculos.Migrations
 {
-    public partial class InitialCreate : Migration
+    public partial class DBInicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,20 +59,23 @@ namespace LojaVeiculos.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NomeModelo = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Categoria = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    IdMarca = table.Column<int>(type: "int", nullable: false),
-                    MarcaId = table.Column<int>(type: "int", nullable: true)
+                    Nome = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Carroceria = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Motor = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Cambio = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    TbCombustivel = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    QtdePortas = table.Column<int>(type: "int", nullable: false),
+                    IdMarca = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Modelo", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Modelo_Marca_MarcaId",
-                        column: x => x.MarcaId,
+                        name: "FK_Modelo_Marca_IdMarca",
+                        column: x => x.IdMarca,
                         principalTable: "Marca",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -108,24 +111,22 @@ namespace LojaVeiculos.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Placa = table.Column<string>(type: "nvarchar(7)", maxLength: 7, nullable: true),
                     Ano = table.Column<int>(type: "int", nullable: false),
-                    Cor = table.Column<int>(type: "int", maxLength: 30, nullable: false),
+                    Cor = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Km = table.Column<decimal>(type: "decimal(10,1)", nullable: false),
                     Valor = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    TpCombustivel = table.Column<int>(type: "int", maxLength: 30, nullable: false),
-                    Status = table.Column<int>(type: "int", maxLength: 30, nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
                     IdConcessionaria = table.Column<int>(type: "int", nullable: false),
-                    concessionariaId = table.Column<int>(type: "int", nullable: true),
                     IdModelo = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Veiculo", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Veiculo_Concessionaria_concessionariaId",
-                        column: x => x.concessionariaId,
+                        name: "FK_Veiculo_Concessionaria_IdConcessionaria",
+                        column: x => x.IdConcessionaria,
                         principalTable: "Concessionaria",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Veiculo_Modelo_IdModelo",
                         column: x => x.IdModelo,
@@ -214,25 +215,23 @@ namespace LojaVeiculos.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdVeiculo = table.Column<int>(type: "int", nullable: false),
-                    veiculoId = table.Column<int>(type: "int", nullable: true),
-                    IdVenda = table.Column<int>(type: "int", nullable: false),
-                    vendaId = table.Column<int>(type: "int", nullable: true)
+                    IdVenda = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_ItemVenda", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ItemVenda_Veiculo_veiculoId",
-                        column: x => x.veiculoId,
+                        name: "FK_ItemVenda_Veiculo_IdVeiculo",
+                        column: x => x.IdVeiculo,
                         principalTable: "Veiculo",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ItemVenda_Venda_vendaId",
-                        column: x => x.vendaId,
+                        name: "FK_ItemVenda_Venda_IdVenda",
+                        column: x => x.IdVenda,
                         principalTable: "Venda",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -246,19 +245,19 @@ namespace LojaVeiculos.Migrations
                 column: "IdUsuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemVenda_veiculoId",
+                name: "IX_ItemVenda_IdVeiculo",
                 table: "ItemVenda",
-                column: "veiculoId");
+                column: "IdVeiculo");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemVenda_vendaId",
+                name: "IX_ItemVenda_IdVenda",
                 table: "ItemVenda",
-                column: "vendaId");
+                column: "IdVenda");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Modelo_MarcaId",
+                name: "IX_Modelo_IdMarca",
                 table: "Modelo",
-                column: "MarcaId");
+                column: "IdMarca");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Usuario_IdTipoUsuario",
@@ -266,9 +265,9 @@ namespace LojaVeiculos.Migrations
                 column: "IdTipoUsuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Veiculo_concessionariaId",
+                name: "IX_Veiculo_IdConcessionaria",
                 table: "Veiculo",
-                column: "concessionariaId");
+                column: "IdConcessionaria");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Veiculo_IdModelo",

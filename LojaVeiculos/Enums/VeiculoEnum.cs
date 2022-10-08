@@ -23,7 +23,7 @@
 
         public enum Status
         {
-            Em_Estoque,
+            EmEstoque,
             Vendido
         };
 

@@ -3,8 +3,12 @@ using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
+using System.Transactions;
 
 namespace LojaVeiculos.Repositories
 {
@@ -33,12 +37,17 @@ namespace LojaVeiculos.Repositories
 
         public Venda FindById(int id)
         {
-            return ctx.Venda.FirstOrDefault(v => v.Id == id);
+            return ctx.Venda.Include(c => c.Cliente).ThenInclude(u => u.Usuario).ThenInclude(t => t.TipoUsuario)
+                            .Include(i => i.ItensVenda).ThenInclude(v => v.Veiculo).ThenInclude(m => m.Modelo).ThenInclude(a => a.Marca)
+                            .FirstOrDefault(v => v.Id == id);
         }
 
         public Venda Insert(Venda entity)
         {
-            ////Verifica se o cliente existe
+            IVeiculoRepository repoVeiculo = new VeiculoRepositorie(ctx);
+
+
+            ////Verifica se o cliente existe no BD
             //IRepository<Cliente> repoCliente = new ModeloRepository(ctx);
 
             //if (repoCliente.FindById(entity.idCliente) == null)
@@ -46,13 +55,52 @@ namespace LojaVeiculos.Repositories
             //    throw new ConstraintException("Cliente não cadastrado");
             //}
 
-            ctx.Venda.Add(entity);
 
-            ctx.SaveChanges();
+            //Verifica se todos veiculos existem no BD
+            foreach (ItemVenda i in entity.ItensVenda)
+            {
+                if (repoVeiculo.FindById(i.IdVeiculo) == null)
+                {
+                    throw new ConstraintException($"Veículo[{i.IdVeiculo}] não cadastrado");
+                }
+            }
 
-            entity = FindById(entity.Id);
+            //Verifica se os itensVenda estão repetidos
 
-            return entity;
+
+            var transaction = ctx.Database.BeginTransaction();
+
+            try
+            {
+                ctx.Venda.Add(entity);
+
+                ctx.SaveChanges();
+
+
+                //Altera status do veiculo
+                foreach (ItemVenda i in entity.ItensVenda)
+                {
+                    //IVeiculoRepository repoVeiculo = new VeiculoRepositorie(ctx);
+                    repoVeiculo.UpdateStatus(i.IdVeiculo);
+                }
+
+
+                //Salva cartao do cliente
+
+
+                //
+                transaction.Commit();
+
+                entity = FindById(entity.Id);
+
+                return entity;
+            }
+            catch (Exception ex)
+            {
+                transaction.Rollback();
+
+                throw new Exception("Erro de transação");
+            }
         }
 
         public void Update(Venda entity)

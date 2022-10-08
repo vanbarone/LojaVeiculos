@@ -6,17 +6,23 @@ using System;
 
 namespace LojaVeiculos.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/veiculos")]
     [ApiController]
     public class VeiculoController : ControllerBase
     {
-        IRepository<Veiculo> repo;
+        IVeiculoRepository repo;
 
-        public VeiculoController(IRepository<Veiculo> _repository)
+        public VeiculoController(IVeiculoRepository _repository)
         {
             repo = _repository;
         }
 
+
+        /// <summary>
+        /// Lista todos os veículos cadastrados
+        /// </summary>
+        /// <returns>Lista de objetos(Veiculos),
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpGet]
         public IActionResult GetAll()
         {
@@ -33,6 +39,13 @@ namespace LojaVeiculos.Controllers
         }
 
 
+        /// <summary>
+        /// Mostra o veículo cadastrado com o id informado
+        /// </summary>
+        /// <param name="id">Id do veículo</param>
+        /// <returns>Objeto(Veiculo) se o veículo foi encontrado, 
+        ///          NOT FOUND se o veículo não foi encontrado,
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpGet("{id}")]
         public IActionResult GetById(int id)
         {
@@ -52,6 +65,38 @@ namespace LojaVeiculos.Controllers
         }
 
 
+        /// <summary>
+        /// Mostra o veículo cadastrado com a placa informada
+        /// </summary>
+        /// <param name="placa">Placa do veículo</param>
+        /// <returns>Objeto(Veiculo) se o veículo foi encontrado, 
+        ///          NOT FOUND se o veículo não foi encontrado,
+        ///          Erro 500 se deu falha na transação</returns>
+        [HttpGet("Buscar/{placa}")]
+        public IActionResult GetByPlaca(string placa)
+        {
+            try
+            {
+                var obj = repo.FindByPlaca(placa);
+
+                if (obj == null)
+                    return NotFound(new { Error = "Não existe registro cadastrado com essa 'placa'" });
+
+                return Ok(obj);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = "Falha na transação", Message = ex.Message });
+            }
+        }
+
+
+        /// <summary>
+        /// Cadastra um novo veículo
+        /// </summary>
+        /// <param name="entity">Objeto(Veiculo) com todos os dados do veiculo</param>
+        /// <returns>Objeto(Veiculo) se a inclusão foi realizada com sucesso, 
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpPost]
         public IActionResult Insert(Veiculo entity)
         {
@@ -68,6 +113,15 @@ namespace LojaVeiculos.Controllers
         }
 
 
+        /// <summary>
+        /// Altera todos os dados de um veiculo
+        /// </summary>
+        /// <param name="id">Id do veículo</param>
+        /// <param name="entity">Objeto(Veiculo) com todos os dados do veiculo</param>
+        /// <returns>Mensagem("Registro alterado com sucesso" se a alteração foi realizada com sucesso, 
+        ///          BAD REQUEST se o id informado e o id do veículo forem diferentes,
+        ///          NOT FOUND se o veículo não foi encontrado,
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpPut("{id}")]
         public IActionResult Update(int id, Veiculo entity)
         {
@@ -95,6 +149,15 @@ namespace LojaVeiculos.Controllers
         }
 
 
+        /// <summary>
+        /// Altera alguns dados de um veiculo
+        /// </summary>
+        /// <param name="id">Id do veículo</param>
+        /// <param name="patch">Objeto com os dados do veiculo que serão alterados</param>
+        /// <returns>Mensagem("Dados alterados com sucesso" se a alteração foi realizada com sucesso, 
+        ///          BAD REQUEST se o id informado e o id do veículo forem diferentes,
+        ///          NOT FOUND se o veículo não foi encontrado,
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpPatch("{id}")]
         public IActionResult UpdatePatch(int id, [FromBody] JsonPatchDocument patch)
         {
@@ -121,7 +184,14 @@ namespace LojaVeiculos.Controllers
         }
 
 
-        [HttpDelete("{Id}")]
+        /// <summary>
+        /// Exclui um veículo
+        /// </summary>
+        /// <param name="id">Id do veículo</param>
+        /// <returns>Mensagem("Registro excluído com sucesso" se a exclusão foi realizada com sucesso, 
+        ///          NOT FOUND se o veículo não foi encontrado,
+        ///          Erro 500 se deu falha na transação</returns>
+        [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
             try

@@ -39,7 +39,7 @@ namespace LojaVeiculos
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LojaVeiculos", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Loja de Veículos", Version = "v1" });
 
                 var xmlArquivo = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlArquivo));
@@ -81,7 +81,7 @@ namespace LojaVeiculos
             );
 
             services.AddTransient<LojaVeiculosContext, LojaVeiculosContext>();
-            services.AddTransient<IRepository<Veiculo>, VeiculoRepositorie>();
+            services.AddTransient<IVeiculoRepository, VeiculoRepositorie>();
             services.AddTransient<IRepository<Venda>, VendaRepositorie>();
 
             //Config JWT

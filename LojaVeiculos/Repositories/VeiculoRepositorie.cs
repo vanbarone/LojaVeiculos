@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace LojaVeiculos.Repositories
 {
-    public class VeiculoRepositorie : IRepository<Veiculo>
+    public class VeiculoRepositorie : IVeiculoRepository
     {
         LojaVeiculosContext ctx;
 
@@ -42,6 +42,14 @@ namespace LojaVeiculos.Repositories
                             .Include(c => c.Concessionaria)
                             .Include(m => m.Modelo).ThenInclude(a => a.Marca)
                             .FirstOrDefault(v => v.Id == id);
+        }
+
+        public Veiculo FindByPlaca(string placa)
+        {
+            return ctx.Veiculo
+                            .Include(c => c.Concessionaria)
+                            .Include(m => m.Modelo).ThenInclude(a => a.Marca)
+                            .FirstOrDefault(v => v.Placa == placa);
         }
 
         public Veiculo Insert(Veiculo entity)
@@ -117,6 +125,18 @@ namespace LojaVeiculos.Repositories
             patch.ApplyTo(entity);
 
             ctx.Entry(entity).State = EntityState.Modified;
+
+            ctx.SaveChanges();
+        }
+
+
+        public void UpdateStatus(int id)
+        {
+            Veiculo entity = FindById(id);
+
+            entity.Status = (int)VeiculoEnum.Status.Vendido;
+
+            ctx.Entry(entity).Property(s => s.Status).IsModified = true;
 
             ctx.SaveChanges();
         }

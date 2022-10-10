@@ -9,9 +9,9 @@ namespace LojaVeiculos.Controllers
     public class LoginController : ControllerBase
     {
 
-        ILoginRepositorie repo;
+        ILoginRepository repo;
 
-        public LoginController(ILoginRepositorie _repository)
+        public LoginController(ILoginRepository _repository)
         {
             repo = _repository;
         }

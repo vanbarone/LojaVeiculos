@@ -84,7 +84,8 @@ namespace LojaVeiculos
             services.AddTransient<IVeiculoRepository, VeiculoRepositorie>();
             services.AddTransient<IRepository<Venda>, VendaRepositorie>();
             services.AddTransient<ITipoUsuarioRepositorie, TipoUsuarioRepositorie>();
-
+            services.AddTransient<ILoginRepositorie, LoginRepositorie>();
+            services.AddTransient<IRepository<Usuario>, UsuarioRepositorie>();
 
             //Config JWT
             services.AddAuthentication(options =>
@@ -99,10 +100,10 @@ namespace LojaVeiculos
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("cripto-chave-autenticacao")),
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("lojaVeiculos-chave-autenticacao")),
                     ClockSkew = TimeSpan.FromMinutes(10),
-                    ValidIssuer = "cripto.webAPI",
-                    ValidAudience = "cripto.webAPI"
+                    ValidIssuer = "lojaVeiculos.webAPI",
+                    ValidAudience = "lojaVeiculos.webAPI"
                 };
             });
 

@@ -18,7 +18,7 @@ namespace TestesUnitarios.Models
             Assert.NotNull(veiculo);
             Assert.Equal(veiculo.Id, veiculo.Id);
             Assert.Equal(veiculo.Placa, veiculo.Placa);
-            Assert.Equal(veiculo.concessionaria, veiculo.concessionaria);
+            Assert.Equal(veiculo.Concessionaria, veiculo.Concessionaria);
             Assert.Equal(veiculo.IdConcessionaria, veiculo.IdConcessionaria);
             Assert.Equal(veiculo.Modelo, veiculo.Modelo);
             Assert.Equal(veiculo.IdModelo, veiculo.IdModelo);
@@ -26,7 +26,7 @@ namespace TestesUnitarios.Models
             Assert.True(veiculo.Id == veiculo.Id);
             Assert.True(veiculo.Placa == veiculo.Placa);
             Assert.True(veiculo.Modelo == veiculo.Modelo);
-            Assert.True(veiculo.concessionaria == veiculo.concessionaria);
+            Assert.True(veiculo.Concessionaria == veiculo.Concessionaria);
         }
     }
 }

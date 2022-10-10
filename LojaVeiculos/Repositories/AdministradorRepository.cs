@@ -44,7 +44,7 @@ namespace LojaVeiculos.Repositories
         public Usuario Insert(Usuario entity)
         {
 
-            entity.IdTipoUsuario = 1;   //Sempre salva como administrador
+            entity.IdTipoUsuario = 2;   //Sempre salva como administrador
 
             //criptografa a senha
             entity.Senha = BCrypt.Net.BCrypt.HashPassword(entity.Senha);
@@ -70,6 +70,7 @@ namespace LojaVeiculos.Repositories
 
         public void UpdatePartial(JsonPatchDocument patch, Usuario entity)
         {
+
             patch.ApplyTo(entity);
             ctx.Entry(entity).State = EntityState.Modified;
             ctx.SaveChanges();

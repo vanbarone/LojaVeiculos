@@ -16,6 +16,9 @@ namespace LojaVeiculos.Controllers
             repo = _repository;
         }
 
+        /// <summary>
+        /// Logar usuario na aplicação
+        /// </summary>
         [HttpPost]
         public IActionResult Logar(string email, string senha)
         {

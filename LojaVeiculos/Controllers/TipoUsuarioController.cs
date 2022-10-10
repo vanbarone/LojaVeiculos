@@ -52,13 +52,18 @@ namespace LojaVeiculos.Controllers
             try
             {
                 var retorno = repo.BuscarPorId(id);
-                if(retorno == null)
+
+                // Se o id for nulo
+                if (retorno == null)
                 {
+                    // Retorna erro informando que não foi encontrado
                     return NotFound(new
                     {
                         Message = "Tipo de usuário não encontrado"
                     });
                 }
+
+                // Retorna o tipo de usuário por id
                 return Ok(retorno);
             }
             catch (System.Exception ex)

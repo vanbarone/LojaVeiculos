@@ -32,30 +32,21 @@ namespace LojaVeiculos.Controllers
         {
             try
             {
-                // Pega a senha e transforma em hash
-                //entity.Senha = BCrypt.Net.BCrypt.HashPassword(entity.Senha);
-
                 Usuario retorno = repo.Insert(entity);
 
                 // Retorna o usuario que foi inserido
                 return Ok(retorno);
             }
-            //catch (System.Exception ex)
-            //{
-                //// Se não for inserida da erro
-                //return StatusCode(500, new
-                //{
-                //    Error = "Falha na transação",
-                //    Message = ex.Message,
-                //});
-
-                catch (Exception ex)
+            catch (Exception ex)
             {
-                return StatusCode(500, new { Error = "Falha na transação", Message = ex.Message, Inner = ex.InnerException?.Message });
+                return StatusCode(500, new 
+                { 
+                    Error = "Falha na transação", 
+                    Message = ex.Message, 
+                    Inner = ex.InnerException?.Message 
+                });
             }
-        //}
         }
-
 
         /// <summary>
         /// Lista todos os usuários cadastrados
@@ -74,7 +65,6 @@ namespace LojaVeiculos.Controllers
             }
             catch (System.Exception ex)
             {
-
                 // Se não for inserida da erro
                 return StatusCode(500, new
                 {
@@ -134,9 +124,6 @@ namespace LojaVeiculos.Controllers
                     return BadRequest("Os ids são diferentes");
                 }
 
-                // Pega a senha e transforma em hash
-                //entity.Senha = BCrypt.Net.BCrypt.HashString(entity.Senha);
-
                 // Verifica se o id existe no banco
                 var retorno = repo.FindById(id);
 
@@ -152,8 +139,6 @@ namespace LojaVeiculos.Controllers
 
                 //criptografa a senha
                 entity.Senha = BCrypt.Net.BCrypt.HashPassword(entity.Senha);
-
-
 
                 // Efetiva a alteração
                 repo.Update(entity);
@@ -243,7 +228,7 @@ namespace LojaVeiculos.Controllers
                 {
                     Error = "Falha na transação",
                     Message = ex.Message,
-                });
+            });
             }
         }
     }

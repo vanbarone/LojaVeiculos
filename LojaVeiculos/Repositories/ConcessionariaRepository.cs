@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 
 namespace LojaVeiculos.Repositories
 {
@@ -47,6 +48,8 @@ namespace LojaVeiculos.Repositories
             ctx.SaveChanges();
            
         }
+
+        
 
         public void UpdatePartial(JsonPatchDocument patch, Concessionaria entity)
         {

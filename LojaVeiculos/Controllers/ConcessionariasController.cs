@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using LojaVeiculos.Models;
 using LojaVeiculos.Interfaces;
 using System.Text.Json;
+using Microsoft.AspNetCore.JsonPatch;
 
 namespace LojaVeiculos.Controllers
 {
@@ -125,7 +126,7 @@ namespace LojaVeiculos.Controllers
 
 
         [HttpPatch("{id}")]
-        public IActionResult AlterarParcial(int id, [FromBody] JsonDocument patch)
+        public IActionResult AlterarParcial(int id, [FromBody] JsonPatchDocument patch)
         {
             if (patch ==null)
             {

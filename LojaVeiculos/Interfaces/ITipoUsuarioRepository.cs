@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace LojaVeiculos.Interfaces
 {
-    public interface ITipoUsuarioRepositorie
+    public interface ITipoUsuarioRepository
     {
         ICollection<TipoUsuario> ListarTodos();
 

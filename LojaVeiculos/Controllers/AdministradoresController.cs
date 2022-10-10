@@ -11,12 +11,13 @@ using System.Data;
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "ADMINISTRADOR")]
     [ApiController]
-    public class UsuarioController : ControllerBase
+    public class AdministradoresController : ControllerBase
     {
         private readonly IRepository<Usuario> repo;
 
-        public UsuarioController(IRepository<Usuario> _repository)
+        public AdministradoresController(IRepository<Usuario> _repository)
         {
             repo = _repository;
         }
@@ -39,16 +40,23 @@ namespace LojaVeiculos.Controllers
                 // Retorna o usuario que foi inserido
                 return Ok(retorno);
             }
-            catch (System.Exception ex)
+            //catch (System.Exception ex)
+            //{
+                //// Se não for inserida da erro
+                //return StatusCode(500, new
+                //{
+                //    Error = "Falha na transação",
+                //    Message = ex.Message,
+                //});
+
+                catch (Exception ex)
             {
-                // Se não for inserida da erro
-                return StatusCode(500, new
-                {
-                    Error = "Falha na transação",
-                    Message = ex.Message,
-                });
+                return StatusCode(500, new { Error = "Falha na transação", Message = ex.Message, Inner = ex.InnerException?.Message });
             }
+        //}
         }
+
+
         /// <summary>
         /// Lista todos os usuários cadastrados
         /// </summary>
@@ -141,6 +149,12 @@ namespace LojaVeiculos.Controllers
                         Message = "Usuário não encontrado"
                     });
                 }
+
+                //criptografa a senha
+                entity.Senha = BCrypt.Net.BCrypt.HashPassword(entity.Senha);
+
+
+
                 // Efetiva a alteração
                 repo.Update(entity);
 

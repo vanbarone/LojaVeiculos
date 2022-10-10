@@ -16,6 +16,7 @@ namespace LojaVeiculos.Interfaces
         public void UpdatePartial(JsonPatchDocument patch, entity entity);
 
         public void Delete(entity entity);
+
     }
 }
 

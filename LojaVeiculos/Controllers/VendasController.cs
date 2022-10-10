@@ -1,19 +1,22 @@
 ﻿using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Data;
 
 namespace LojaVeiculos.Controllers
 {
-    [Route("api/vendas")]
+    [Route("api/[controller]")]
+    [Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
     [ApiController]
-    public class VendaController : ControllerBase
+    public class VendasController : ControllerBase
     {
         IRepository<Venda> repo;
 
-        public VendaController(IRepository<Venda> _repository)
+        public VendasController(IRepository<Venda> _repository)
         {
             repo = _repository;
         }

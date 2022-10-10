@@ -1,16 +1,19 @@
 ﻿using LojaVeiculos.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Data;
 
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
+    [Authorize(Roles = "ADMINISTRADOR")]
     [ApiController]
     public class TipoUsuarioController : ControllerBase
     {
-        ITipoUsuarioRepositorie repo;
+        ITipoUsuarioRepository repo;
 
-        public TipoUsuarioController(ITipoUsuarioRepositorie _repository)
+        public TipoUsuarioController(ITipoUsuarioRepository _repository)
         {
             repo = _repository;
         }

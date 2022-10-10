@@ -9,17 +9,17 @@ using System.Linq;
 
 namespace LojaVeiculos.Repositories
 {
-    public class UsuarioRepositorie : IRepository<Usuario>
+    public class AdministradorRepository : IRepository<Usuario>
     {
 
         LojaVeiculosContext ctx;
 
-        public UsuarioRepositorie(LojaVeiculosContext _ctx)
+        public AdministradorRepository(LojaVeiculosContext _ctx)
         {
             ctx = _ctx;
         }
 
-        [Authorize]
+
         public void Delete(Usuario entity)
         {
             ctx.Usuario.Remove(entity);
@@ -44,11 +44,19 @@ namespace LojaVeiculos.Repositories
         public Usuario Insert(Usuario entity)
         {
 
+            entity.IdTipoUsuario = 1;   //Sempre salva como administrador
+
+            //criptografa a senha
+            entity.Senha = BCrypt.Net.BCrypt.HashPassword(entity.Senha);
+
+
             ctx.Usuario.Add(entity);
 
             // Salva as alterações no banco
              
             ctx.SaveChanges();
+
+            entity = FindById(entity.Id);
 
             // Retorna o usuário
             return entity;
@@ -65,6 +73,11 @@ namespace LojaVeiculos.Repositories
             patch.ApplyTo(entity);
             ctx.Entry(entity).State = EntityState.Modified;
             ctx.SaveChanges();
+        }
+
+        public void Dispose()
+        {
+            ctx.Dispose();
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace LojaVeiculos.Interfaces
 {
-    public interface ILoginRepositorie
+    public interface ILoginRepository
     {
         string Logar(string email, string senha);
     }

@@ -11,11 +11,11 @@ using System.Linq;
 
 namespace LojaVeiculos.Repositories
 {
-    public class VeiculoRepositorie : IVeiculoRepository
+    public class VeiculoRepository : IVeiculoRepository
     {
         LojaVeiculosContext ctx;
 
-        public VeiculoRepositorie(LojaVeiculosContext _ctx)
+        public VeiculoRepository(LojaVeiculosContext _ctx)
         {
             ctx = _ctx;
         }

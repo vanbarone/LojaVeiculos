@@ -1,7 +1,6 @@
 ﻿using LojaVeiculos.Enuns;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Common;
 using System.Text.Json.Serialization;
 
 namespace LojaVeiculos.Models

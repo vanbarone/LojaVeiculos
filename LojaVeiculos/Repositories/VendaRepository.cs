@@ -12,11 +12,11 @@ using System.Transactions;
 
 namespace LojaVeiculos.Repositories
 {
-    public class VendaRepositorie : IRepository<Venda>
+    public class VendaRepository : IRepository<Venda>
     {
         LojaVeiculosContext ctx;
 
-        public VendaRepositorie(LojaVeiculosContext _ctx)
+        public VendaRepository(LojaVeiculosContext _ctx)
         {
             ctx = _ctx;
         }
@@ -44,7 +44,7 @@ namespace LojaVeiculos.Repositories
 
         public Venda Insert(Venda entity)
         {
-            IVeiculoRepository repoVeiculo = new VeiculoRepositorie(ctx);
+            IVeiculoRepository repoVeiculo = new VeiculoRepository(ctx);
 
 
             ////Verifica se o cliente existe no BD

@@ -32,10 +32,10 @@ namespace LojaVeiculos.Models
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Informe sua senha")]
-        [StringLength(10)]
         [MinLength(4)]
         public string Senha { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         [ForeignKey("TipoUsuario")]
         public int IdTipoUsuario { get; set; }
 

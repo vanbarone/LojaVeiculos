@@ -7,12 +7,12 @@ using System.Linq;
 
 namespace LojaVeiculos.Repositories
 {
-    public class TipoUsuarioRepositorie : ITipoUsuarioRepositorie
+    public class TipoUsuarioRepository : ITipoUsuarioRepository
     {
 
         LojaVeiculosContext ctx;
 
-        public TipoUsuarioRepositorie(LojaVeiculosContext _ctx)
+        public TipoUsuarioRepository(LojaVeiculosContext _ctx)
         {
             ctx = _ctx;
         }

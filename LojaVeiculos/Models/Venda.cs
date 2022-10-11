@@ -14,13 +14,27 @@ namespace LojaVeiculos.Models
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]     //não mostra esse campo no json na inserção e alteração
         public int Id { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         [Required]
         public DateTime Data { get; set; }
 
+
+        [Required]
+        [ForeignKey("Cliente")]
+        public int IdCliente { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        public Cliente Cliente { get; set; }
+
+        public ICollection<ItemVenda> ItensVenda { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         [Column(TypeName = "decimal(10,2)")]
         public decimal VlTotal { get; set; }
 
-        public VendaEnum.FormaPagto FormaPagto { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        public string FormaPagto { get; set; }
+
 
         [Required]
         [StringLength(255)]
@@ -55,14 +69,6 @@ namespace LojaVeiculos.Models
         public string CartaoCodSeguranca { get; set; }
 
 
-        [Required]
-        [ForeignKey("Cliente")]
-        public int IdCliente { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public Cliente Cliente { get; set; }
-
-
-        public ICollection<ItemVenda> ItensVenda { get; set; }
+       
     }
 }

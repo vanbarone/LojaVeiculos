@@ -8,7 +8,7 @@ using System;
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "ADMINISTRADOR")]
+    //[Authorize(Roles = "ADMINISTRADOR")]
     [ApiController]
     public class VeiculosController : ControllerBase
     {

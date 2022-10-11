@@ -55,20 +55,20 @@ namespace LojaVeiculos.Repositories
         public Veiculo Insert(Veiculo entity)
         {
             ////Verifica se o modelo existe
-            //IRepository<Modelo> repoModelo = new ModeloRepository(ctx);
+            IRepository<Modelo> repoModelo = new ModeloRepository(ctx);
 
-            //if (repoModelo.FindById(entity.IdModelo) == null)
-            //{
-            //    throw new ConstraintException("Modelo não cadastrado");
-            //}
+            if (repoModelo.FindById(entity.IdModelo) == null)
+            {
+                throw new ConstraintException("Modelo não cadastrado");
+            }
 
             ////Verifica se a concessionária existe
-            //IRepository<Concessionaria> repoConcessionaria = new ConcessionariaRepository(ctx);
+            IRepository<Concessionaria> repoConcessionaria = new ConcessionariaRepository(ctx);
 
-            //if (repoConcessionaria.FindById(entity.IdConcessionaria) == null)
-            //{
-            //    throw new ConstraintException("Concessionária não cadastrada");
-            //}
+            if (repoConcessionaria.FindById(entity.IdConcessionaria) == null)
+            {
+                throw new ConstraintException("Concessionária não cadastrada");
+            }
 
             entity.Status = (int)VeiculoEnum.Status.EmEstoque;
 
@@ -84,20 +84,20 @@ namespace LojaVeiculos.Repositories
         public void Update(Veiculo entity)
         {
             ////Verifica se o modelo existe
-            //IRepository<Modelo> repoModelo = new ModeloRepository(ctx);
+            IRepository<Modelo> repoModelo = new ModeloRepository(ctx);
 
-            //if (repoModelo.FindById(entity.IdModelo) == null)
-            //{
-            //    throw new ConstraintException("Modelo não cadastrado");
-            //}
+            if (repoModelo.FindById(entity.IdModelo) == null)
+            {
+                throw new ConstraintException("Modelo não cadastrado");
+            }
 
             ////Verifica se a concessionária existe
-            //IRepository<Concessionaria> repoConcessionaria = new ConcessionariaRepository(ctx);
+            IRepository<Concessionaria> repoConcessionaria = new ConcessionariaRepository(ctx);
 
-            //if (repoConcessionaria.FindById(entity.IdConcessionaria) == null)
-            //{
-            //    throw new ConstraintException("Concessionária não cadastrada");
-            //}
+            if (repoConcessionaria.FindById(entity.IdConcessionaria) == null)
+            {
+                throw new ConstraintException("Concessionária não cadastrada");
+            }
 
             ctx.Veiculo.Update(entity);
 
@@ -107,20 +107,20 @@ namespace LojaVeiculos.Repositories
         public void UpdatePartial(JsonPatchDocument patch, Veiculo entity)
         {
             ////Verifica se o modelo existe
-            //IRepository<Modelo> repoModelo = new ModeloRepository(ctx);
+            IRepository<Modelo> repoModelo = new ModeloRepository(ctx);
 
-            //if (repoModelo.FindById(entity.IdModelo) == null)
-            //{
-            //    throw new ConstraintException("Modelo não cadastrado");
-            //}
+            if (repoModelo.FindById(entity.IdModelo) == null)
+            {
+                throw new ConstraintException("Modelo não cadastrado");
+            }
 
             ////Verifica se a concessionária existe
-            //IRepository<Concessionaria> repoConcessionaria = new ConcessionariaRepository(ctx);
+            IRepository<Concessionaria> repoConcessionaria = new ConcessionariaRepository(ctx);
 
-            //if (repoConcessionaria.FindById(entity.IdConcessionaria) == null)
-            //{
-            //    throw new ConstraintException("Concessionária não cadastrada");
-            //}
+            if (repoConcessionaria.FindById(entity.IdConcessionaria) == null)
+            {
+                throw new ConstraintException("Concessionária não cadastrada");
+            }
 
             patch.ApplyTo(entity);
 

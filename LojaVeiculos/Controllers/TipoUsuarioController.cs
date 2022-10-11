@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "ADMINISTRADOR")]
+    //[Authorize(Roles = "ADMINISTRADOR")]
     [ApiController]
     public class TipoUsuarioController : ControllerBase
     {

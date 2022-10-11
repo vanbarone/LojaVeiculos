@@ -11,7 +11,6 @@ using System.Data;
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "ADMINISTRADOR")]
     [ApiController]
     public class AdministradoresController : ControllerBase
     {

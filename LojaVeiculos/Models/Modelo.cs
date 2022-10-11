@@ -14,17 +14,34 @@ namespace LojaVeiculos.Models
 
         [Required]
         [StringLength(30)]
-        public string NomeModelo { get; set; }
+        public string Nome { get; set; }
 
         [Required]
         [StringLength(30)]
-        public string Categoria { get; set; }
+        public string Carroceria { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public string Motor { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public string Cambio { get; set; }
+
+        [Required]
+        [StringLength(30)]
+        public string TbCombustivel { get; set; }
+
+        [Required]
+        public int QtdePortas { get; set; }
+
 
         [ForeignKey("Marca")]
         public int IdMarca { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public Marca Marca;
+        public Marca Marca { get; set; }
+
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         public ICollection<Veiculo> Veiculos { get; set; }

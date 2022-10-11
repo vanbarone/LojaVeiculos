@@ -39,7 +39,7 @@ namespace LojaVeiculos
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LojaVeiculos", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Loja de Veículos", Version = "v1" });
 
                 var xmlArquivo = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlArquivo));
@@ -81,9 +81,17 @@ namespace LojaVeiculos
             );
 
             services.AddTransient<LojaVeiculosContext, LojaVeiculosContext>();
-            services.AddTransient<IRepository<Veiculo>, VeiculoRepositorie>();
-            services.AddTransient<IRepository<Cliente>, ClienteRepository>();
+            services.AddTransient<IRepository<Usuario>, AdministradorRepository>();
             services.AddTransient<IRepository<Cartao>, CartaoRepository>();
+            services.AddTransient<IRepository<Cliente>, ClienteRepository>();
+            services.AddTransient<IRepository<Concessionaria>, ConcessionariaRepository>();
+            services.AddTransient<ILoginRepository, LoginRepository>();
+            services.AddTransient<IRepository<Marca>, MarcaRepository>();
+            services.AddTransient<IRepository<Modelo>, ModeloRepository>();
+            services.AddTransient<ITipoUsuarioRepository, TipoUsuarioRepository>();
+            services.AddTransient<IVeiculoRepository, VeiculoRepository>();
+            services.AddTransient<IRepository<Venda>, VendaRepository>();
+                        
 
             //Config JWT
             services.AddAuthentication(options =>
@@ -98,10 +106,10 @@ namespace LojaVeiculos
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("cripto-chave-autenticacao")),
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("lojaVeiculos-chave-autenticacao")),
                     ClockSkew = TimeSpan.FromMinutes(10),
-                    ValidIssuer = "cripto.webAPI",
-                    ValidAudience = "cripto.webAPI"
+                    ValidIssuer = "lojaVeiculos.webAPI",
+                    ValidAudience = "lojaVeiculos.webAPI"
                 };
             });
 

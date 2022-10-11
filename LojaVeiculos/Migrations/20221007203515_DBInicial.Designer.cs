@@ -4,14 +4,16 @@ using LojaVeiculos.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace LojaVeiculos.Migrations
 {
     [DbContext(typeof(LojaVeiculosContext))]
-    partial class LojaVeiculosContextModelSnapshot : ModelSnapshot
+    [Migration("20221007203515_DBInicial")]
+    partial class DBInicial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -262,7 +264,8 @@ namespace LojaVeiculos.Migrations
 
                     b.Property<string>("Senha")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Sobrenome")
                         .IsRequired()

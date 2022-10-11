@@ -45,7 +45,7 @@ namespace LojaVeiculos.Repositories
             ctx.SaveChanges();
         }
 
-        //não faz sentido ter um partial
+        //não faz sentido ter um partial por ter só um atributo
         public void UpdatePartial(JsonPatchDocument patch, Marca entity)
         {
             throw new System.NotImplementedException();

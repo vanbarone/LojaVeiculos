@@ -19,6 +19,7 @@ namespace LojaVeiculos.Repositories
         public void Delete(Marca entity)
         {
             ctx.Marca.Remove(entity);
+            ctx.SaveChanges();
         }
 
         public ICollection<Marca> FindAll()

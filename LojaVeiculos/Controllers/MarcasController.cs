@@ -41,7 +41,7 @@ namespace LojaVeiculos.Controllers
         }
 
        /// <summary>
-       /// Cadastrar todas as Marcas
+       /// Cadastrar uma nova Marca.
        /// </summary>
        /// <param name="entity"></param>
        /// <returns></returns>
@@ -66,7 +66,7 @@ namespace LojaVeiculos.Controllers
         }
 
         /// <summary>
-        /// Buscar por Id a Concessionária
+        /// Buscar por Id uma Marca.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -96,7 +96,7 @@ namespace LojaVeiculos.Controllers
 
 
         /// <summary>
-        /// Alterar a marca
+        /// Alterar uma marca.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="marca"></param>
@@ -105,12 +105,17 @@ namespace LojaVeiculos.Controllers
         public IActionResult Alterar(int id, Marca marca)
         {
             try
-            {
+            { // verifica se o id informado é diferente do id da entidade
                 if (id != marca.Id)
-                    return BadRequest();
+                    return BadRequest(new {Message = "Dados não conferem (id da entidade é diferente do Id informado)"});
+
+                //verifica se existe o registro
+                var obj = repo.FindById(id);
+                if (obj == null)
+                    return NotFound(new { Message = "Não existe registro cadastrado com esse id" });
 
                 repo.Update(marca);
-                return NoContent();
+                return Ok(new { Message = "Registro alterado com sucesso" });
             }
             catch (System.Exception ex)
             {
@@ -127,7 +132,7 @@ namespace LojaVeiculos.Controllers
      
           
         /// <summary>
-        /// Deletatar uma Marca
+        /// Deletar uma Marca
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>

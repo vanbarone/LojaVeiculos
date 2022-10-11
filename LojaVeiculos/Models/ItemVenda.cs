@@ -20,6 +20,7 @@ namespace LojaVeiculos.Models
         public Veiculo Veiculo { get; set; }
 
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         [Required]
         [ForeignKey("Venda")]
         public int IdVenda { get; set; }

@@ -81,7 +81,7 @@ namespace LojaVeiculos
             );
 
             services.AddTransient<LojaVeiculosContext, LojaVeiculosContext>();
-            services.AddTransient<IRepository<Usuario>, AdministradorRepository>();
+            services.AddTransient<IRepository<Usuario>, UsuarioRepository>();
             services.AddTransient<IRepository<Cartao>, CartaoRepository>();
             services.AddTransient<IRepository<Cliente>, ClienteRepository>();
             services.AddTransient<IRepository<Concessionaria>, ConcessionariaRepository>();

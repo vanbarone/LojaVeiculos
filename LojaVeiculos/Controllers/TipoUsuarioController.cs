@@ -1,13 +1,11 @@
 ﻿using LojaVeiculos.Interfaces;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System.Data;
 
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "ADMINISTRADOR")]
+    //[Authorize(Roles = "ADMINISTRADOR")]
     [ApiController]
     public class TipoUsuarioController : ControllerBase
     {
@@ -28,52 +26,19 @@ namespace LojaVeiculos.Controllers
             try
             {
                 var retorno = repo.ListarTodos();
+
                 return Ok(retorno);
             }
             catch (System.Exception ex)
             {
 
-                return StatusCode(500, new 
-                { 
-                    Error = "Falha na transação", 
-                    Message = ex.Message 
-                });
-            }
-        }
-
-        /// <summary>
-        /// Lista o tipo usuário por id
-        /// </summary>
-        /// <param name="id">tipo do usuário</param>
-        /// <returns>Retorna o tipo de usuário, se não encontrar da erro</returns>
-        [HttpGet("{id}")]
-        public IActionResult BuscarPorID(int id)
-        {
-            try
-            {
-                var retorno = repo.BuscarPorId(id);
-
-                // Se o id for nulo
-                if (retorno == null)
-                {
-                    // Retorna erro informando que não foi encontrado
-                    return NotFound(new
-                    {
-                        Message = "Tipo de usuário não encontrado"
-                    });
-                }
-
-                // Retorna o tipo de usuário por id
-                return Ok(retorno);
-            }
-            catch (System.Exception ex)
-            {
                 return StatusCode(500, new
                 {
                     Error = "Falha na transação",
                     Message = ex.Message
                 });
-            }    
+            }
         }
+
     }
 }

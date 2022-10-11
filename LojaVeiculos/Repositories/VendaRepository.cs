@@ -1,4 +1,5 @@
 ﻿using LojaVeiculos.Context;
+using LojaVeiculos.Enuns;
 using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
 using Microsoft.AspNetCore.JsonPatch;
@@ -9,6 +10,7 @@ using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Transactions;
+using System.Xml.Schema;
 
 namespace LojaVeiculos.Repositories
 {
@@ -44,30 +46,62 @@ namespace LojaVeiculos.Repositories
 
         public Venda Insert(Venda entity)
         {
+            decimal total = 0;
+
             IVeiculoRepository repoVeiculo = new VeiculoRepository(ctx);
 
 
-            ////Verifica se o cliente existe no BD
-            //IRepository<Cliente> repoCliente = new ModeloRepository(ctx);
+            //Verifica se o cliente existe no BD
+            IRepository<Cliente> repoCliente = new ClienteRepository(ctx);
 
-            //if (repoCliente.FindById(entity.idCliente) == null)
-            //{
-            //    throw new ConstraintException("Cliente não cadastrado");
-            //}
+            if (repoCliente.FindById(entity.IdCliente) == null)
+            {
+                throw new ConstraintException("Cliente não cadastrado");
+            }
 
 
             //Verifica se todos veiculos existem no BD
             foreach (ItemVenda i in entity.ItensVenda)
             {
-                if (repoVeiculo.FindById(i.IdVeiculo) == null)
+                Veiculo veiculo = repoVeiculo.FindById(i.IdVeiculo);
+
+                if (veiculo == null)
                 {
                     throw new ConstraintException($"Veículo[{i.IdVeiculo}] não cadastrado");
+                }else if (veiculo.Status == (int)VeiculoEnum.Status.Vendido)
+                {
+                    throw new ConstraintException($"Veículo[{i.IdVeiculo}] já foi vendido");
+                }
+                else
+                {
+                    total += veiculo.Valor;
                 }
             }
 
             //Verifica se os itensVenda estão repetidos
+            var query = from item in entity.ItensVenda
+                        group item by item.IdVeiculo into fileGroup
+                        where fileGroup.Count() > 1
+                        select fileGroup;
+            if (query.Count() > 0)
+                throw new ConstraintException("Veículos duplicados");
 
 
+            //
+            if (entity.CartaoMesVencimento < 1 && entity.CartaoMesVencimento > 12)
+                throw new ConstraintException("Mês de vencimento do cartão inválido");
+
+            //
+            if (entity.CartaoAnoVencimento < DateTime.Now.Year)
+                throw new ConstraintException("Ano de vencimento do cartão inválido");
+
+
+            entity.Data = DateTime.Now;
+            entity.FormaPagto = "Crédito";
+            entity.VlTotal = total;
+
+
+            //Inicia gravação
             var transaction = ctx.Database.BeginTransaction();
 
             try
@@ -86,6 +120,10 @@ namespace LojaVeiculos.Repositories
 
 
                 //Salva cartao do cliente
+                var cartao = SetarDadosCartao(entity);
+
+                IRepository<Cartao> repoCartao = new CartaoRepository(ctx);
+                repoCartao.Insert(cartao);
 
 
                 //
@@ -99,7 +137,7 @@ namespace LojaVeiculos.Repositories
             {
                 transaction.Rollback();
 
-                throw new Exception("Erro de transação");
+                throw new Exception("Erro de transação " + ex.Message + ex.InnerException?.Message);
             }
         }
 
@@ -111,6 +149,23 @@ namespace LojaVeiculos.Repositories
         public void UpdatePartial(JsonPatchDocument patch, Venda entity)
         {
             throw new System.NotImplementedException();
+        }
+
+
+        private Cartao SetarDadosCartao(Venda entity)
+        {
+            Cartao cartao = new Cartao();
+
+            cartao.IdCliente = entity.IdCliente;
+            cartao.Numero = entity.CartaoCpf;
+            cartao.Titular = entity.CartaoTitular;
+            cartao.Bandeira = entity.CartaoBandeira;
+            cartao.Cpf = entity.CartaoCpf;
+            cartao.MesVencimento = entity.CartaoMesVencimento;
+            cartao.AnoVencimento = entity.CartaoAnoVencimento;
+            cartao.CodSeguranca = entity.CartaoCodSeguranca;
+
+            return cartao;
         }
     }
 }

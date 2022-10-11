@@ -13,6 +13,8 @@ namespace LojaVeiculos.Repositories
 {
     public class LoginRepository : ILoginRepository
     {
+        // Injeção de dependência e Metodo Construtor
+
         LojaVeiculosContext ctx;
 
         public LoginRepository(LojaVeiculosContext _ctx)
@@ -22,13 +24,14 @@ namespace LojaVeiculos.Repositories
 
         public string Logar(string email, string senha)
         {
+            // Verifica se existe um usuário com email
             var usuario = ctx.Usuario.FirstOrDefault(u => u.Email == email);
 
             if (usuario != null && senha != null && usuario.Senha.Contains("$2b$"))
             {
                 if (BCrypt.Net.BCrypt.Verify(senha, usuario.Senha))
                 {
-                    IRepository<Usuario> repoUsuario = new AdministradorRepository(ctx);
+                    IRepository<Usuario> repoUsuario = new UsuarioRepository(ctx);
                     
                     usuario = repoUsuario.FindById(usuario.Id);
                     
@@ -58,10 +61,7 @@ namespace LojaVeiculos.Repositories
                         );
 
                     //*** Fim das credenciais do JWT ***
-                    return new JwtSecurityTokenHandler().WriteToken(meuToken);
-
-
-                    
+                    return new JwtSecurityTokenHandler().WriteToken(meuToken);  
 
                 }
             }

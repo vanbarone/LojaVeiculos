@@ -21,6 +21,11 @@ namespace LojaVeiculos.Repositories
             return ctx.TipoUsuario.Find(id);
         }
 
+        public TipoUsuario BuscarPorTipo(string tipo)
+        {
+            return ctx.TipoUsuario.FirstOrDefault(t => t.Tipo == tipo);
+        }
+
         public ICollection<TipoUsuario> ListarTodos()
         {
             // Utiliza o linq para listar os tipos de usuários

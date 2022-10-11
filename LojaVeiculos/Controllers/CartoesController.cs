@@ -1,6 +1,5 @@
 ﻿using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LojaVeiculos.Controllers
@@ -40,40 +39,5 @@ namespace LojaVeiculos.Controllers
                 });
             }
         }
-
-        /// <summary>
-        /// Listar uma cartao por id
-        /// </summary>
-        /// <param name="id">Pegar cartao por id</param>
-        /// <returns>Cartao selecionado</returns>
-        [HttpGet("{id}")]
-        public IActionResult BuscarId(int id)
-        {
-            try
-            {
-                //chamando repositorio
-                var retorno = repo.FindById(id);
-                //validar para ver se o id inserido existe no banco
-                if (retorno == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Cartao nÃ£o encontrado"
-                    });
-                }
-                return Ok(retorno);
-            }
-            catch (System.Exception ex)
-            {
-                //retornado mensagem de erro
-                return StatusCode(500, new
-                {
-                    Error = "Falha na conexao",
-                    ex.Message,
-                }); ;
-            }
-        }
-
-
     }
 }

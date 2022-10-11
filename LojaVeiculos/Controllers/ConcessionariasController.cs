@@ -41,6 +41,7 @@ namespace LojaVeiculos.Controllers
             }
         }
 
+
         /// <summary>
         /// Cadastrar uma concessionária
         /// </summary>
@@ -51,8 +52,8 @@ namespace LojaVeiculos.Controllers
             try
             {
                 var obj = repo.Insert(entity);
-                return Ok(obj);
 
+                return Ok(obj);
             }
             catch (System.Exception ex)
             {
@@ -64,6 +65,7 @@ namespace LojaVeiculos.Controllers
                 });
             }
         }
+
 
         /// <summary>
         /// Buscar por Id a Concessionária
@@ -106,11 +108,22 @@ namespace LojaVeiculos.Controllers
         {
             try
             {
-                if (id != concessionaria.Id)
-                    return BadRequest();
+                //Verifica se o id foi informado no corpo do objeto
+                if (concessionaria.Id == null || concessionaria.Id == 0)
+                    return BadRequest("Informe o campo 'id' no corpo do objeto (ex.: 'id': 1)");
 
+                // Verifica se os ids existem
+                if (id != concessionaria.Id)
+                    return BadRequest(new { message = "Dados não conferem (id da entidade é diferente do id informado)" });
+
+                //Verifica se existe registro com o id informado
+                if (repo.FindById(id) == null)
+                    return NotFound(new { message = "Não existe registro cadastrado com esse 'id'" });
+
+                //Efetua a alteração
                 repo.Update(concessionaria);
-                return NoContent();
+
+                return Ok(new { Msg = "Registro alterado com sucesso" });
             }
             catch (System.Exception ex)
             {
@@ -128,18 +141,20 @@ namespace LojaVeiculos.Controllers
         [HttpPatch("{id}")]
         public IActionResult AlterarParcial(int id, [FromBody] JsonPatchDocument patch)
         {
-            if (patch ==null)
-            {
-                return BadRequest();
-            }
+            if (patch == null)
+                return BadRequest(new { message = "Não foi informado o objeto com as alterações desejadas" });
 
+            //verifica se existe o registro no banco de dados
             var concessionaria = repo.FindById(id);
-            if( concessionaria==null)
-            { return NotFound(new { Message = "Concessionária não encontrada" }); }
+
+            if (concessionaria == null)
+                return NotFound(new { message = "Não existe registro cadastrado com esse 'id'" });
 
             repo.UpdatePartial(patch, concessionaria);
+            
             return Ok(concessionaria);
         }
+
 
         [HttpDelete("{id}")]
         public IActionResult Deletar(int id)
@@ -152,7 +167,8 @@ namespace LojaVeiculos.Controllers
                 { return NotFound(new { Message = "Concessionária não encontrada" }); }
 
                 repo.Delete(busca);
-                return NoContent();
+
+                return Ok(new { Msg = "Registro excluído com sucesso" });
             }
             catch (System.Exception ex )
             {

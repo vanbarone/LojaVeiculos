@@ -33,7 +33,7 @@ namespace LojaVeiculos.Controllers
             {
                 Usuario retorno = repo.Insert(entity);
 
-                // Retorna o usuario que foi inserido
+                // Retorna o administrador que foi inserido
                 return Ok(retorno);
             }
             catch (Exception ex)
@@ -46,6 +46,7 @@ namespace LojaVeiculos.Controllers
                 });
             }
         }
+
 
         /// <summary>
         /// Lista todos os usuários cadastrados
@@ -72,6 +73,8 @@ namespace LojaVeiculos.Controllers
                 });
             }
         }
+        
+        
         /// <summary>
         /// Busca todos os suários cadastradas por id
         /// </summary>
@@ -89,12 +92,12 @@ namespace LojaVeiculos.Controllers
                     // Retorna erro informando que não foi encontrado
                     return NotFound(new
                     {
-                        Message = "Usuário não encontrado"
+                        Message = "Administrador não encontrado"
                     });
                 }
+
                 // Retorna o usuário por id
                 return Ok(retorno);
-
             }
             catch (System.Exception ex)
             {
@@ -106,6 +109,8 @@ namespace LojaVeiculos.Controllers
                 });
             }
         }
+       
+        
         /// <summary>
         /// Alterar os dados do usuário
         /// </summary>
@@ -116,37 +121,25 @@ namespace LojaVeiculos.Controllers
         {
             try
             {
+                //Verifica se o id foi informado no corpo do objeto
+                if (entity.Id == null || entity.Id == 0)
+                    return BadRequest("Informe o campo 'id' no corpo do objeto (ex.: 'id': 1)");
+
                 // Verifica se os ids existem
                 if (id != entity.Id)
-                {
-                    // Retorna erro
-                    return BadRequest("Os ids são diferentes");
-                }
+                    return BadRequest(new { message = "Dados não conferem (id da entidade é diferente do id informado)" });
 
-                // Verifica se o id existe no banco
-                var retorno = repo.FindById(id);
-
-                // Se o id for nulo
-                if (retorno == null)
-                {
-                    // Retorna erro informando que não foi encontrado
-                    return NotFound(new
-                    {
-                        Message = "Usuário não encontrado"
-                    });
-                }
+                //Verifica se existe registro com o id informado
+                if (repo.FindById(id) == null)
+                    return NotFound(new { message = "Não existe registro cadastrado com esse 'id'" });
 
                 //criptografa a senha
                 entity.Senha = BCrypt.Net.BCrypt.HashPassword(entity.Senha);
 
-                // Efetiva a alteração
+                //Efetua a alteração
                 repo.Update(entity);
 
-                // Retorna sucesso, não retorna o objeto
-                return Ok(new 
-                { 
-                    Message = "Registro alterado com sucesso" 
-                });
+                return Ok(new { Msg = "Registro alterado com sucesso" });
             }
             catch (System.Exception ex)
             {
@@ -159,6 +152,8 @@ namespace LojaVeiculos.Controllers
                 });
             }
         }
+        
+        
         /// <summary>
         /// Altera os dados parcialmente
         /// </summary>
@@ -166,29 +161,22 @@ namespace LojaVeiculos.Controllers
         [HttpPatch("{id}")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument patchUsuario)
         {
-            // Verifica se o Patch está vazio
             if (patchUsuario == null)
-            {
-                // Retorna erro
-                return BadRequest();
-            }
+                return BadRequest(new { message = "Não foi informado o objeto com as alterações desejadas" });
 
-            // Busca o objeto
+            //verifica se existe o registro no banco de dados
             var usuario = repo.FindById(id);
-            // Se o id for nulo
+
             if (usuario == null)
-            {
-                // Retorna erro informando que não foi encontrado
-                return NotFound(new
-                {
-                    Message = "Usuário não encontrado"
-                });
-            }
+                return NotFound(new { message = "Não existe registro cadastrado com esse 'id'" });
 
             // Pega o patch e o usuário encontrado
             repo.UpdatePartial(patchUsuario, usuario);
+
             return Ok(usuario);
         }
+
+
         /// <summary>
         /// Deleta todos dados de um usuário
         /// </summary>
@@ -202,21 +190,23 @@ namespace LojaVeiculos.Controllers
             {
                 // Busca por id
                 var busca = repo.FindById(id);
+
                 // Se busca nulo
                 if (busca == null)
                 {
                     // Retorna erro informando que não foi encontrado
                     return NotFound(new
                     {
-                        Message = "Usuário não encontrado"
+                        Message = "Administrador não encontrado"
                     });
                 }
+
                 // Exclui por busca de id
                 repo.Delete(busca);
 
                 return Ok(new
                 {
-                    msg = "Usuário exlcuído com sucesso!"
+                    msg = "Registro excluído com sucesso!"
                 });
 
             }

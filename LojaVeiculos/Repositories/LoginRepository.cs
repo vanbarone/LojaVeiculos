@@ -31,7 +31,7 @@ namespace LojaVeiculos.Repositories
             {
                 if (BCrypt.Net.BCrypt.Verify(senha, usuario.Senha))
                 {
-                    IRepository<Usuario> repoUsuario = new AdministradorRepository(ctx);
+                    IRepository<Usuario> repoUsuario = new UsuarioRepository(ctx);
                     
                     usuario = repoUsuario.FindById(usuario.Id);
                     

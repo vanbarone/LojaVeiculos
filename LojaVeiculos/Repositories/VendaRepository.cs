@@ -48,12 +48,12 @@ namespace LojaVeiculos.Repositories
 
 
             ////Verifica se o cliente existe no BD
-            //IRepository<Cliente> repoCliente = new ModeloRepository(ctx);
+            IRepository<Cliente> repoCliente = new ClienteRepository(ctx);
 
-            //if (repoCliente.FindById(entity.idCliente) == null)
-            //{
-            //    throw new ConstraintException("Cliente não cadastrado");
-            //}
+            if (repoCliente.FindById(entity.IdCliente) == null)
+            {
+                throw new ConstraintException("Cliente não cadastrado");
+            }
 
 
             //Verifica se todos veiculos existem no BD
@@ -66,6 +66,8 @@ namespace LojaVeiculos.Repositories
             }
 
             //Verifica se os itensVenda estão repetidos
+
+
 
 
             var transaction = ctx.Database.BeginTransaction();
@@ -86,6 +88,10 @@ namespace LojaVeiculos.Repositories
 
 
                 //Salva cartao do cliente
+                var cartao = SetarDadosCartao(entity);
+
+                IRepository<Cartao> repoCartao = new CartaoRepository(ctx);
+                repoCartao.Insert(cartao);
 
 
                 //
@@ -111,6 +117,23 @@ namespace LojaVeiculos.Repositories
         public void UpdatePartial(JsonPatchDocument patch, Venda entity)
         {
             throw new System.NotImplementedException();
+        }
+
+
+        private Cartao SetarDadosCartao(Venda entity)
+        {
+            Cartao cartao = new Cartao();
+
+            cartao.IdCliente = entity.IdCliente;
+            cartao.Numero = entity.CartaoCpf;
+            cartao.Titular = entity.CartaoTitular;
+            cartao.Bandeira = entity.CartaoBandeira;
+            cartao.Cpf = entity.CartaoCpf;
+            cartao.MesVencimento = entity.CartaoMesVencimento;
+            cartao.AnoVencimento = entity.CartaoAnoVencimento;
+            cartao.CodSeguranca = entity.CartaoCodSeguranca;
+
+            return cartao;
         }
     }
 }

@@ -24,7 +24,9 @@ namespace LojaVeiculos.Repositories
 
         public ICollection<Cartao> FindAll()
         {
-            return ctx.Cartao.ToList();
+            return ctx.Cartao
+                        .Include(c => c.Cliente).ThenInclude(u => u.Usuario).ThenInclude(t => t.TipoUsuario)
+                        .ToList();
         }
 
         public Cartao FindById(int id)

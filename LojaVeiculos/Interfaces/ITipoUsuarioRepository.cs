@@ -8,5 +8,7 @@ namespace LojaVeiculos.Interfaces
         ICollection<TipoUsuario> ListarTodos();
 
         TipoUsuario BuscarPorId(int id);
+
+        TipoUsuario BuscarPorTipo(string tipo);
     }
 }

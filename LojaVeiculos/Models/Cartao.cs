@@ -30,7 +30,7 @@ namespace LojaVeiculos.Models
 
 
         [Required]
-        public string AnoVencimento { get; set; }
+        public int AnoVencimento { get; set; }
 
 
         [Required]

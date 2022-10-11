@@ -52,7 +52,7 @@ namespace LojaVeiculos.Models
 
 
         [Required]
-        public int CartaoCodSeguranca { get; set; }
+        public string CartaoCodSeguranca { get; set; }
 
 
         [Required]

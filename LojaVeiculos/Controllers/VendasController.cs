@@ -10,7 +10,7 @@ using System.Data;
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
+    //[Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
     [ApiController]
     public class VendasController : ControllerBase
     {
@@ -80,6 +80,9 @@ namespace LojaVeiculos.Controllers
         {
             try
             {
+                if (entity.IdCliente == 0)
+                    return BadRequest(new { Error = "Informe o Id do Cliente" });
+
                 if (entity.ItensVenda.Count == 0)
                     return BadRequest(new { Error = "Não foi informado nenhum item de venda" });
 

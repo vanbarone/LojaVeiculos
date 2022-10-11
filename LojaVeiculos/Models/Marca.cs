@@ -6,7 +6,7 @@ namespace LojaVeiculos.Models
 {
     public class Marca
     {
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingDefault)]        
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]        
         [Key]
         public int Id { get; set; }
 

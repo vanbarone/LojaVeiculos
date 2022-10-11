@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 
-namespace LojaVeiculos.Controller
+namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -37,7 +37,7 @@ namespace LojaVeiculos.Controller
                 return StatusCode(500, new
                 {
                     Error = "Falha na conexao",
-                    Message = ex.Message,
+                    ex.Message,
                 });
             }
         }
@@ -60,7 +60,7 @@ namespace LojaVeiculos.Controller
                 return StatusCode(500, new
                 {
                     Error = "Falha na conexao",
-                    Message = ex.Message,
+                    ex.Message,
                 });
             }
         }
@@ -93,7 +93,7 @@ namespace LojaVeiculos.Controller
                 return StatusCode(500, new
                 {
                     Error = "Falha na conexao",
-                    Message = ex.Message,
+                    ex.Message,
                 }); ;
             }
         }
@@ -132,7 +132,7 @@ namespace LojaVeiculos.Controller
                 return StatusCode(500, new
                 {
                     Error = "Falha na conexao",
-                    Message = ex.Message,
+                    ex.Message,
                 }); ;
             }
         }
@@ -173,7 +173,7 @@ namespace LojaVeiculos.Controller
                 return StatusCode(500, new
                 {
                     Error = "Falha na conexao",
-                    Message = ex.Message,
+                    ex.Message,
                 }); ;
             }
         }
@@ -208,7 +208,7 @@ namespace LojaVeiculos.Controller
                 return StatusCode(500, new
                 {
                     Error = "Falha na conexao",
-                    Message = ex.Message,
+                    ex.Message,
                 });
             }
         }

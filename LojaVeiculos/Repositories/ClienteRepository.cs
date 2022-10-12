@@ -5,6 +5,7 @@ using LojaVeiculos.Utils;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace LojaVeiculos.Repositories
@@ -19,6 +20,15 @@ namespace LojaVeiculos.Repositories
         }
         public void Delete(Cliente entity)
         {
+            //Checa constraint - Não deixa excluir se tiver filhos
+            var query = from item in ctx.Compra
+                        where item.IdCliente == entity.Id
+                        select item.Id;
+            if (query.Count() > 0)
+                throw new ConstraintException("Exclusão inválida (Existem compras cadastradas com esse cliente)");
+
+
+            //
             ctx.Cliente.Remove(entity);
 
             //Apaga tb o usuario

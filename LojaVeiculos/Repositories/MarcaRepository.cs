@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.JsonPatch;
 using LojaVeiculos.Context;
 using System.Linq;
 using Microsoft.EntityFrameworkCore;
+using System.Threading;
+using System.Data;
 
 namespace LojaVeiculos.Repositories
 {
@@ -18,6 +20,14 @@ namespace LojaVeiculos.Repositories
         }
         public void Delete(Marca entity)
         {
+            //Checa constraint - Não deixa excluir se tiver filhos
+            var query = from item in ctx.Modelo
+                        where item.IdMarca == entity.Id 
+                        select item.Id;
+            if (query.Count() > 0)
+                throw new ConstraintException("Exclusão inválida (Existem modelos cadastrados com essa marca)");
+
+
             ctx.Marca.Remove(entity);
             ctx.SaveChanges();
         }

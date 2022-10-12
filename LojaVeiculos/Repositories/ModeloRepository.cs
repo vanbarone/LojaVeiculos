@@ -20,6 +20,15 @@ namespace LojaVeiculos.Repositories
 
         public void Delete(Modelo entity)
         {
+            //Checa constraint - Não deixa excluir se tiver filhos
+            var query = from item in ctx.Veiculo
+                        where item.IdModelo == entity.Id
+                        select item.Id;
+            if (query.Count() > 0)
+                throw new ConstraintException("Exclusão inválida (Existem veículos cadastrados com esse modelo)");
+
+
+            //
             ctx.Modelo.Remove(entity);
             ctx.SaveChanges();
         }

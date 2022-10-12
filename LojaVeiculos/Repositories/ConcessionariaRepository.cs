@@ -4,6 +4,7 @@ using LojaVeiculos.Models;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text.Json;
 
@@ -21,7 +22,17 @@ namespace LojaVeiculos.Repositories
 
         public void Delete(Concessionaria entity)
         {
+            //Checa constraint - Não deixa excluir se tiver filhos
+            var query = from item in ctx.Veiculo
+                        where item.IdConcessionaria == entity.Id
+                        select item.Id;
+            if (query.Count() > 0)
+                throw new ConstraintException("Exclusão inválida (Existem veículos cadastrados com essa concessionária)");
+
+
+            //
             ctx.Concessionaria.Remove(entity);
+            
             ctx.SaveChanges();
         }
 

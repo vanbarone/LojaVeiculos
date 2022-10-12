@@ -10,7 +10,7 @@ namespace LojaVeiculos.Utils
 
             public static async Task Execute()
             {
-                var apiKey = "LojaVeiculos";
+                var apiKey = "APIKeyLojaVeiculos";
                 var client = new SendGridClient(apiKey);
                 var from = new EmailAddress("vanbarone.milani@gmail.com", "Vanessa");
                 var subject = "Teste Envio de email com SendGrid";

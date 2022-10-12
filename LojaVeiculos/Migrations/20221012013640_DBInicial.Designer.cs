@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace LojaVeiculos.Migrations
 {
     [DbContext(typeof(LojaVeiculosContext))]
-    [Migration("20221010124758_AlteraTamanhoCampoSenha")]
-    partial class AlteraTamanhoCampoSenha
+    [Migration("20221012013640_DBInicial")]
+    partial class DBInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,21 +27,23 @@ namespace LojaVeiculos.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<string>("AnoVencimento")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("AnoVencimento")
+                        .HasColumnType("int");
 
                     b.Property<string>("Bandeira")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("CodSeguranca")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.Property<string>("Cpf")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<int>("IdCliente")
                         .HasColumnType("int");
@@ -51,7 +53,8 @@ namespace LojaVeiculos.Migrations
 
                     b.Property<string>("Titular")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(60)
+                        .HasColumnType("nvarchar(60)");
 
                     b.HasKey("Numero");
 
@@ -78,6 +81,62 @@ namespace LojaVeiculos.Migrations
                     b.HasIndex("IdUsuario");
 
                     b.ToTable("Cliente");
+                });
+
+            modelBuilder.Entity("LojaVeiculos.Models.Compra", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("CartaoAnoVencimento")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CartaoBandeira")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("CartaoCodSeguranca")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CartaoCpf")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<int>("CartaoMesVencimento")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CartaoNumero")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("CartaoTitular")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FormaPagto")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IdCliente")
+                        .HasColumnType("int");
+
+                    b.Property<decimal>("VlTotal")
+                        .HasColumnType("decimal(10,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("IdCliente");
+
+                    b.ToTable("Compra");
                 });
 
             modelBuilder.Entity("LojaVeiculos.Models.Concessionaria", b =>
@@ -131,26 +190,26 @@ namespace LojaVeiculos.Migrations
                     b.ToTable("Concessionaria");
                 });
 
-            modelBuilder.Entity("LojaVeiculos.Models.ItemVenda", b =>
+            modelBuilder.Entity("LojaVeiculos.Models.ItemCompra", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("IdVeiculo")
+                    b.Property<int>("IdCompra")
                         .HasColumnType("int");
 
-                    b.Property<int>("IdVenda")
+                    b.Property<int>("IdVeiculo")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("IdCompra");
+
                     b.HasIndex("IdVeiculo");
 
-                    b.HasIndex("IdVenda");
-
-                    b.ToTable("ItemVenda");
+                    b.ToTable("ItemCompra");
                 });
 
             modelBuilder.Entity("LojaVeiculos.Models.Marca", b =>
@@ -306,8 +365,8 @@ namespace LojaVeiculos.Migrations
                         .HasMaxLength(7)
                         .HasColumnType("nvarchar(7)");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Valor")
                         .HasColumnType("decimal(10,2)");
@@ -319,61 +378,6 @@ namespace LojaVeiculos.Migrations
                     b.HasIndex("IdModelo");
 
                     b.ToTable("Veiculo");
-                });
-
-            modelBuilder.Entity("LojaVeiculos.Models.Venda", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("CartaoAnoVencimento")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CartaoBandeira")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<int>("CartaoCodSeguranca")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CartaoCpf")
-                        .IsRequired()
-                        .HasMaxLength(15)
-                        .HasColumnType("nvarchar(15)");
-
-                    b.Property<int>("CartaoMesVencimento")
-                        .HasColumnType("int");
-
-                    b.Property<string>("CartaoNumero")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("CartaoTitular")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<DateTime>("Data")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FormaPagto")
-                        .HasColumnType("int");
-
-                    b.Property<int>("IdCliente")
-                        .HasColumnType("int");
-
-                    b.Property<decimal>("VlTotal")
-                        .HasColumnType("decimal(10,2)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("IdCliente");
-
-                    b.ToTable("Venda");
                 });
 
             modelBuilder.Entity("LojaVeiculos.Models.Cartao", b =>
@@ -398,23 +402,34 @@ namespace LojaVeiculos.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("LojaVeiculos.Models.ItemVenda", b =>
+            modelBuilder.Entity("LojaVeiculos.Models.Compra", b =>
                 {
+                    b.HasOne("LojaVeiculos.Models.Cliente", "Cliente")
+                        .WithMany()
+                        .HasForeignKey("IdCliente")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Cliente");
+                });
+
+            modelBuilder.Entity("LojaVeiculos.Models.ItemCompra", b =>
+                {
+                    b.HasOne("LojaVeiculos.Models.Compra", "Compra")
+                        .WithMany("ItensCompra")
+                        .HasForeignKey("IdCompra")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("LojaVeiculos.Models.Veiculo", "Veiculo")
                         .WithMany()
                         .HasForeignKey("IdVeiculo")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("LojaVeiculos.Models.Venda", "Venda")
-                        .WithMany("ItensVenda")
-                        .HasForeignKey("IdVenda")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Compra");
 
                     b.Navigation("Veiculo");
-
-                    b.Navigation("Venda");
                 });
 
             modelBuilder.Entity("LojaVeiculos.Models.Modelo", b =>
@@ -458,20 +473,14 @@ namespace LojaVeiculos.Migrations
                     b.Navigation("Modelo");
                 });
 
-            modelBuilder.Entity("LojaVeiculos.Models.Venda", b =>
-                {
-                    b.HasOne("LojaVeiculos.Models.Cliente", "Cliente")
-                        .WithMany()
-                        .HasForeignKey("IdCliente")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Cliente");
-                });
-
             modelBuilder.Entity("LojaVeiculos.Models.Cliente", b =>
                 {
                     b.Navigation("Cartoes");
+                });
+
+            modelBuilder.Entity("LojaVeiculos.Models.Compra", b =>
+                {
+                    b.Navigation("ItensCompra");
                 });
 
             modelBuilder.Entity("LojaVeiculos.Models.Concessionaria", b =>
@@ -487,11 +496,6 @@ namespace LojaVeiculos.Migrations
             modelBuilder.Entity("LojaVeiculos.Models.Modelo", b =>
                 {
                     b.Navigation("Veiculos");
-                });
-
-            modelBuilder.Entity("LojaVeiculos.Models.Venda", b =>
-                {
-                    b.Navigation("ItensVenda");
                 });
 #pragma warning restore 612, 618
         }

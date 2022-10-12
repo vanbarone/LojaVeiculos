@@ -176,7 +176,8 @@ namespace LojaVeiculos.Controllers
                 return StatusCode(500, new
                 {
                     Error = "Falha na transação",
-                    Message = ex.Message
+                    Message = ex.Message,
+                    Inner = ex.InnerException?.Message
                 });
             }
         }

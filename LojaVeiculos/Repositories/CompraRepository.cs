@@ -1,7 +1,7 @@
 ﻿using LojaVeiculos.Context;
-using LojaVeiculos.Enuns;
 using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
+using LojaVeiculos.Utils;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,37 +14,37 @@ using System.Xml.Schema;
 
 namespace LojaVeiculos.Repositories
 {
-    public class VendaRepository : IRepository<Venda>
+    public class CompraRepository : IRepository<Compra>
     {
         LojaVeiculosContext ctx;
 
-        public VendaRepository(LojaVeiculosContext _ctx)
+        public CompraRepository(LojaVeiculosContext _ctx)
         {
             ctx = _ctx;
         }
 
 
-        public void Delete(Venda entity)
+        public void Delete(Compra entity)
         {
             throw new System.NotImplementedException();
         }
 
-        public ICollection<Venda> FindAll()
+        public ICollection<Compra> FindAll()
         {
-            return ctx.Venda
+            return ctx.Compra
                             .Include(c => c.Cliente).ThenInclude(u => u.Usuario).ThenInclude(t => t.TipoUsuario)
-                            .Include(i => i.ItensVenda).ThenInclude(v => v.Veiculo).ThenInclude(m => m.Modelo).ThenInclude(a => a.Marca)
+                            .Include(i => i.ItensCompra).ThenInclude(v => v.Veiculo).ThenInclude(m => m.Modelo).ThenInclude(a => a.Marca)
                             .ToList();
         }
 
-        public Venda FindById(int id)
+        public Compra FindById(int id)
         {
-            return ctx.Venda.Include(c => c.Cliente).ThenInclude(u => u.Usuario).ThenInclude(t => t.TipoUsuario)
-                            .Include(i => i.ItensVenda).ThenInclude(v => v.Veiculo).ThenInclude(m => m.Modelo).ThenInclude(a => a.Marca)
+            return ctx.Compra.Include(c => c.Cliente).ThenInclude(u => u.Usuario).ThenInclude(t => t.TipoUsuario)
+                            .Include(i => i.ItensCompra).ThenInclude(v => v.Veiculo).ThenInclude(m => m.Modelo).ThenInclude(a => a.Marca)
                             .FirstOrDefault(v => v.Id == id);
         }
 
-        public Venda Insert(Venda entity)
+        public Compra Insert(Compra entity)
         {
             decimal total = 0;
 
@@ -61,14 +61,14 @@ namespace LojaVeiculos.Repositories
 
 
             //Verifica se todos veiculos existem no BD
-            foreach (ItemVenda i in entity.ItensVenda)
+            foreach (ItemCompra i in entity.ItensCompra)
             {
                 Veiculo veiculo = repoVeiculo.FindById(i.IdVeiculo);
 
                 if (veiculo == null)
                 {
                     throw new ConstraintException($"Veículo[{i.IdVeiculo}] não cadastrado");
-                }else if (veiculo.Status == (int)VeiculoEnum.Status.Vendido)
+                }else if (veiculo.Status == Util.VeiculoStatus_Vendido)
                 {
                     throw new ConstraintException($"Veículo[{i.IdVeiculo}] já foi vendido");
                 }
@@ -79,7 +79,7 @@ namespace LojaVeiculos.Repositories
             }
 
             //Verifica se os itensVenda estão repetidos
-            var query = from item in entity.ItensVenda
+            var query = from item in entity.ItensCompra
                         group item by item.IdVeiculo into fileGroup
                         where fileGroup.Count() > 1
                         select fileGroup;
@@ -106,15 +106,14 @@ namespace LojaVeiculos.Repositories
 
             try
             {
-                ctx.Venda.Add(entity);
+                ctx.Compra.Add(entity);
 
                 ctx.SaveChanges();
 
 
                 //Altera status do veiculo
-                foreach (ItemVenda i in entity.ItensVenda)
+                foreach (ItemCompra i in entity.ItensCompra)
                 {
-                    //IVeiculoRepository repoVeiculo = new VeiculoRepositorie(ctx);
                     repoVeiculo.UpdateStatus(i.IdVeiculo);
                 }
 
@@ -122,7 +121,7 @@ namespace LojaVeiculos.Repositories
                 //Salva cartao do cliente
                 var cartao = SetarDadosCartao(entity);
 
-                IRepository<Cartao> repoCartao = new CartaoRepository(ctx);
+                ICartaoRepository repoCartao = new CartaoRepository(ctx);
                 repoCartao.Insert(cartao);
 
 
@@ -141,18 +140,18 @@ namespace LojaVeiculos.Repositories
             }
         }
 
-        public void Update(Venda entity)
+        public void Update(Compra entity)
         {
             throw new System.NotImplementedException();
         }
 
-        public void UpdatePartial(JsonPatchDocument patch, Venda entity)
+        public void UpdatePartial(JsonPatchDocument patch, Compra entity)
         {
             throw new System.NotImplementedException();
         }
 
 
-        private Cartao SetarDadosCartao(Venda entity)
+        private Cartao SetarDadosCartao(Compra entity)
         {
             Cartao cartao = new Cartao();
 

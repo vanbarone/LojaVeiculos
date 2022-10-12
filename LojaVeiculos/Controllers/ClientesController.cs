@@ -216,6 +216,7 @@ namespace LojaVeiculos.Controllers
                 {
                     Error = "Falha na conexao",
                     ex.Message,
+                    Inner = ex.InnerException?.Message
                 });
             }
         }

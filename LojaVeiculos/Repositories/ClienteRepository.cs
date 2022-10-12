@@ -1,6 +1,7 @@
 ﻿using LojaVeiculos.Context;
 using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
+using LojaVeiculos.Utils;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -45,7 +46,7 @@ namespace LojaVeiculos.Repositories
         {
             //Pega o id do TipoUsuario 'Cliente'
             ITipoUsuarioRepository repo = new TipoUsuarioRepository(ctx);
-            var tipo = repo.BuscarPorTipo("Cliente");
+            var tipo = repo.BuscarPorTipo(Util.TpUsuario_Cliente);
 
             entity.Usuario.IdTipoUsuario = tipo.Id;   
 

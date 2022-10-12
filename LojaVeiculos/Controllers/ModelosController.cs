@@ -103,15 +103,27 @@ namespace LojaVeiculos.Controllers
       /// <param name="modelo"></param>
       /// <returns></returns>
         [HttpPut]
-        public IActionResult Alterar(int id, Modelo modelo)
+        public IActionResult Alterar(int id, Modelo entity)
         {
             try
             {
-                if (id != modelo.Id)
-                    return BadRequest();
+                //Verifica se o id foi informado no corpo do objeto
+                if (entity.Id == null || entity.Id == 0)
+                    return BadRequest("Informe o campo 'id' no corpo do objeto (ex.: 'id': 1)");
 
-                repo.Update(modelo);
-                return NoContent();
+                //verifica se o id informado é diferente do id da entidade
+                if (id != entity.Id)
+                    return BadRequest(new { message = "Dados não conferem (id da entidade é diferente do id informado)" });
+
+                //Verifica se existe registro com o id informado
+                if (repo.FindById(id) == null)
+                    return NotFound(new { message = "Não existe registro cadastrado com esse 'id'" });
+
+
+                //
+                repo.Update(entity);
+
+                return Ok(new { Msg = "Registro alterado com sucesso" });
             }
             catch (System.Exception ex)
             {
@@ -163,7 +175,8 @@ namespace LojaVeiculos.Controllers
                 { return NotFound(new { Message = "Modelo não encontrado" }); }
 
                 repo.Delete(busca);
-                return NoContent();
+
+                return Ok(new { Msg = "Registro excluído com sucesso" });
             }
             catch (System.Exception ex)
             {
@@ -171,7 +184,8 @@ namespace LojaVeiculos.Controllers
                 return StatusCode(500, new
                 {
                     Error = "Falha na transação",
-                    Message = ex.Message
+                    Message = ex.Message,
+                    Inner = ex.InnerException?.Message
                 });
             }
         }

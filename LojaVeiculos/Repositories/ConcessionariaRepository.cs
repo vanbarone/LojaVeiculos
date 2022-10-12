@@ -27,12 +27,16 @@ namespace LojaVeiculos.Repositories
 
         public ICollection<Concessionaria> FindAll()
         {
-            return ctx.Concessionaria.ToList();
+            return ctx.Concessionaria
+                                .Include(v => v.Veiculos).ThenInclude(m => m.Modelo).ThenInclude(a => a.Marca)
+                                .ToList();
         }
 
         public Concessionaria FindById(int id)
         {
-            return ctx.Concessionaria.Find(id);
+            return ctx.Concessionaria
+                                .Include(v => v.Veiculos).ThenInclude(m => m.Modelo).ThenInclude(a => a.Marca)
+                                .FirstOrDefault(v => v.Id == id);
         }
 
         public Concessionaria Insert(Concessionaria entity)

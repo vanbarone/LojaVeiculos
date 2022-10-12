@@ -1,6 +1,7 @@
 ﻿using LojaVeiculos.Context;
 using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
+using LojaVeiculos.Utils;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +31,7 @@ namespace LojaVeiculos.Repositories
 
         public ICollection<Usuario> FindAll()
         {
-            return ctx.Usuario.Where(u => u.TipoUsuario.Tipo == "Administrador")
+            return ctx.Usuario.Where(u => u.TipoUsuario.Tipo == Util.TpUsuario_Administrador)
                             .Include(u => u.TipoUsuario)
                             .ToList();
         }
@@ -39,7 +40,7 @@ namespace LojaVeiculos.Repositories
         {
             return  ctx.Usuario
                             .Include(t => t.TipoUsuario)
-                            .FirstOrDefault(u => u.Id == id && u.TipoUsuario.Tipo == "Administrador");
+                            .FirstOrDefault(u => u.Id == id && u.TipoUsuario.Tipo == Util.TpUsuario_Administrador);
         }
 
         public Usuario Insert(Usuario entity)
@@ -48,7 +49,7 @@ namespace LojaVeiculos.Repositories
 
             //Pega o id do TipoUsuario 'Administrador'            
             ITipoUsuarioRepository repo = new TipoUsuarioRepository(ctx);
-            var tipo = repo.BuscarPorTipo("Administrador");
+            var tipo = repo.BuscarPorTipo(Util.TpUsuario_Administrador);
 
             entity.IdTipoUsuario = tipo.Id;
 
@@ -77,7 +78,7 @@ namespace LojaVeiculos.Repositories
                 entity = FindById(entity.Id);
             }
 
-            if (entity.TipoUsuario.Tipo != "Administrador")
+            if (entity.TipoUsuario.Tipo != Util.TpUsuario_Administrador)
             {
                 throw new ConstraintException("Administrador não cadastrado'");
             }
@@ -103,7 +104,7 @@ namespace LojaVeiculos.Repositories
                 entity = FindById(entity.Id);
             }
 
-            if (entity.TipoUsuario.Tipo != "Administrador")
+            if (entity.TipoUsuario.Tipo != Util.TpUsuario_Administrador)
             {
                 throw new ConstraintException("Administrador não cadastrado'");
             }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace LojaVeiculos.Utils
 {
-    public class Email
+    public static class Email
     {
 
             public static async Task Execute()

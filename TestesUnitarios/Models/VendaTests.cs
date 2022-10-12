@@ -9,10 +9,10 @@ namespace TestesUnitarios.Models
         public void TestRetornarVendaNotNull()
         {
             //Preparação
-            Venda venda;
+            Compra venda;
 
             //Execução
-            venda = new Venda();
+            venda = new Compra();
 
             // Retorno esperado
             Assert.NotNull(venda);

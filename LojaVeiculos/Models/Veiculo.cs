@@ -1,5 +1,4 @@
-﻿using LojaVeiculos.Enuns;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
@@ -31,8 +30,7 @@ namespace LojaVeiculos.Models
         public decimal Valor { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        [Required]
-        public int Status { get; set; }
+        public string Status { get; set; }
 
         [Required]
         [ForeignKey("Concessionaria")]

@@ -82,7 +82,7 @@ namespace LojaVeiculos
 
             services.AddTransient<LojaVeiculosContext, LojaVeiculosContext>();
             services.AddTransient<IRepository<Usuario>, AdministradorRepository>();
-            services.AddTransient<IRepository<Cartao>, CartaoRepository>();
+            services.AddTransient<ICartaoRepository, CartaoRepository>();
             services.AddTransient<IRepository<Cliente>, ClienteRepository>();
             services.AddTransient<IRepository<Concessionaria>, ConcessionariaRepository>();
             services.AddTransient<ILoginRepository, LoginRepository>();
@@ -90,8 +90,9 @@ namespace LojaVeiculos
             services.AddTransient<IRepository<Modelo>, ModeloRepository>();
             services.AddTransient<ITipoUsuarioRepository, TipoUsuarioRepository>();
             services.AddTransient<IVeiculoRepository, VeiculoRepository>();
-            services.AddTransient<IRepository<Venda>, VendaRepository>();
-                        
+            services.AddTransient<IRepository<Compra>, CompraRepository>();
+            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+
 
             //Config JWT
             services.AddAuthentication(options =>

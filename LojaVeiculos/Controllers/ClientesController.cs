@@ -1,8 +1,11 @@
 ﻿using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Data;
 
 namespace LojaVeiculos.Controllers
 {
@@ -38,15 +41,18 @@ namespace LojaVeiculos.Controllers
                 {
                     Error = "Falha na conexao",
                     ex.Message,
+                    Inner = ex.InnerException?.Message
                 });
             }
         }
+
 
         /// <summary>
         /// Listando clientes
         /// </summary>
         /// <returns>Cliente listado</returns>
         [HttpGet]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Listar()
         {
             try
@@ -71,6 +77,7 @@ namespace LojaVeiculos.Controllers
         /// <param name="id">Pegar cliente por id</param>
         /// <returns>Cliente selecionado</returns>
         [HttpGet("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult BuscarId(int id)
         {
             try
@@ -105,26 +112,32 @@ namespace LojaVeiculos.Controllers
         /// <param name="cliente">Guardar dados atualizados</param>
         /// <returns>Cliente alterado</returns>
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Alterar(int id, Cliente cliente)
         {
             try
             {
+                //Verifica se o id foi informado no corpo do objeto
+                if (cliente.Id == null || cliente.Id == 0)
+                    return BadRequest("Informe o campo 'id' no corpo do objeto (ex.: 'id': 1)");
+
+
                 //validando para ver se o id inserido eh de algum cliente
+                //verifica se o Id passado é o mesmo id da entidade
                 if (id != cliente.Id)
-                {
-                    return BadRequest("Nao existe o id inserido");
-                }
-                //chamando repositorio
-                var retorno = repo.FindById(id);
-                //validando retorno
-                if (retorno == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Cliente nao encontrado"
-                    });
-                }
-                return NoContent();
+                    return BadRequest(new { message = "Dados não conferem (id da entidade é diferente do id informado)" });
+
+                //Verifica se existe registro com o id informado
+                if (repo.FindById(id) == null)
+                    return NotFound(new { message = "Não existe registro cadastrado com esse 'id'" });
+
+                //criptografa a senha
+                cliente.Usuario.Senha = BCrypt.Net.BCrypt.HashPassword(cliente.Usuario.Senha);
+
+                //Efetua a alteração
+                repo.Update(cliente);
+
+                return Ok(new { Msg = "Registro alterado com sucesso" });
             }
             catch (System.Exception ex)
             {
@@ -137,6 +150,7 @@ namespace LojaVeiculos.Controllers
             }
         }
 
+
         /// <summary>
         /// Alterar parcialmente o cliente
         /// </summary>
@@ -144,27 +158,23 @@ namespace LojaVeiculos.Controllers
         /// <param name="patchCliente">Guardar cliente atualizado</param>
         /// <returns></returns>
         [HttpPatch("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument patchCliente)
         {
             try
             {
-                //validando para ver se existe no banco de dados
                 if (patchCliente == null)
-                {
-                    return BadRequest();
-                }
-                //chamando repositorio
+                    return BadRequest(new { message = "Não foi informado o objeto com as alterações desejadas" });
+
+                //verifica se existe o registro no banco de dados
                 var cliente = repo.FindById(id);
-                //validando cliente
+
                 if (cliente == null)
-                {
-                    return NotFound(new
-                    {
-                        Message = "Cliente nao encontrado"
-                    });
-                }
+                    return NotFound(new { message = "Não existe registro cadastrado com esse 'id'" });
+
                 //alterando
                 repo.UpdatePartial(patchCliente, cliente);
+
                 return Ok(cliente);
             }
             catch (System.Exception ex)
@@ -178,18 +188,21 @@ namespace LojaVeiculos.Controllers
             }
         }
 
+
         /// <summary>
         /// Deletar um cliente
         /// </summary>
         /// <param name="id">Pegar cliente por id</param>
         /// <returns>Cliente deletado</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Excluir(int id)
         {
             try
             {
                 //chamando repositorio
                 var busca = repo.FindById(id);
+
                 //validando a busca do cliente
                 if (busca == null)
                 {
@@ -200,7 +213,8 @@ namespace LojaVeiculos.Controllers
                 }
 
                 repo.Delete(busca);
-                return NoContent();
+
+                return Ok("Registro excluído com sucesso");
             }
             catch (System.Exception ex)
             {
@@ -209,6 +223,7 @@ namespace LojaVeiculos.Controllers
                 {
                     Error = "Falha na conexao",
                     ex.Message,
+                    Inner = ex.InnerException?.Message
                 });
             }
         }

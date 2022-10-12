@@ -1,4 +1,5 @@
 ﻿using LojaVeiculos.Interfaces;
+using LojaVeiculos.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,11 +24,24 @@ namespace LojaVeiculos.Controllers
         public IActionResult Logar(string email, string senha)
         {
             var logar = repo.Logar(email, senha);
+
             if (logar == null)
-            {
-                return Unauthorized();
-            }
+                return Unauthorized("você não tem permissão para acesar esse recurso");
+
             return Ok(new { token = logar });
+        }
+
+
+        /// <summary>
+        /// Envia email para recuperação de senha
+        /// </summary>
+        [HttpGet]
+        public IActionResult RecuperarSenha(string email)
+        {
+            Email.Execute().Wait();
+
+
+            return Ok("Email enviado com sucesso");
         }
     }
 }

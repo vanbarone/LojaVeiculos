@@ -3,34 +3,34 @@ using Xunit;
 
 namespace TestesUnitarios.Models
 {
-    public class ItemVendaTests
+    public class ItemCompraTests
     {
         [Fact]
         public void TestRetornarItemVendaNotNull()
         {
             //Preparação
-            ItemVenda itemVenda;
+            ItemCompra itemCompra;
 
             //Execução
-            itemVenda = new ItemVenda();
+            itemCompra = new ItemCompra();
 
             //Retorno esperado
-            Assert.NotNull(itemVenda);
+            Assert.NotNull(itemCompra);
 
-            Assert.IsType<ItemVenda>(itemVenda);
+            Assert.IsType<ItemCompra>(itemCompra);
         }
 
         [Fact]
         public void TestValidarTipoItemVenda()
         {
             //Preparação
-            ItemVenda itemVenda;
+            ItemCompra itemCompra;
 
             //Execução
-            itemVenda = new ItemVenda();
+            itemCompra = new ItemCompra();
 
             //Retorno esperado
-            Assert.IsType<ItemVenda>(itemVenda);
+            Assert.IsType<ItemCompra>(itemCompra);
         }
     }
 }

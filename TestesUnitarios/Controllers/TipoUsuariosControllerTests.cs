@@ -2,7 +2,7 @@
 using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
 using Microsoft.AspNetCore.Mvc;
-using Moq;
+using Mock;
 using System.Collections.Generic;
 using Xunit;
 

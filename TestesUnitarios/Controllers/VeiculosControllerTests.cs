@@ -2,17 +2,21 @@
 using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using System.Collections.Generic;
 using Xunit;
 
 namespace TestesUnitarios.Controllers
 {
+    
     public class VeiculosControllerTests
     {
         //Preparação
         private readonly Mock<IVeiculoRepository> mockRepo;
         private readonly VeiculosController control;
+
+        
         public VeiculosControllerTests()
         {
             mockRepo = new Mock<IVeiculoRepository>();

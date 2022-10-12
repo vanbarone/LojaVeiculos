@@ -6,7 +6,7 @@ namespace TestesUnitarios.Models
     public class ItemCompraTests
     {
         [Fact]
-        public void TestRetornarItemVendaNotNull()
+        public void TestRetornarItemCompraNotNull()
         {
             //Preparação
             ItemCompra itemCompra;
@@ -21,7 +21,6 @@ namespace TestesUnitarios.Models
         }
 
         [Fact]
-        public void TestValidarTipoItemVenda()
         {
             //Preparação
             ItemCompra itemCompra;

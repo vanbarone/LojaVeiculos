@@ -1,7 +1,7 @@
 ﻿using LojaVeiculos.Context;
-using LojaVeiculos.Enuns;
 using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
+using LojaVeiculos.Utils;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -23,6 +23,14 @@ namespace LojaVeiculos.Repositories
 
         public void Delete(Veiculo entity)
         {
+            //Checa constraint - Não deixa excluir se tiver filhos
+            var query = from item in ctx.ItemCompra
+                        where item.IdVeiculo == entity.Id
+                        select item.Id;
+            if (query.Count() > 0)
+                throw new ConstraintException("Exclusão inválida (Existem compras cadastradas com esse veículo)");
+
+
             ctx.Veiculo.Remove(entity);
 
             ctx.SaveChanges();
@@ -70,7 +78,7 @@ namespace LojaVeiculos.Repositories
                 throw new ConstraintException("Concessionária não cadastrada");
             }
 
-            entity.Status = (int)VeiculoEnum.Status.EmEstoque;
+            entity.Status = Util.VeiculoStatus_EmEstoque;
 
             ctx.Veiculo.Add(entity);
 
@@ -134,7 +142,7 @@ namespace LojaVeiculos.Repositories
         {
             Veiculo entity = FindById(id);
 
-            entity.Status = (int)VeiculoEnum.Status.Vendido;
+            entity.Status = Util.VeiculoStatus_Vendido;
 
             ctx.Entry(entity).Property(s => s.Status).IsModified = true;
 

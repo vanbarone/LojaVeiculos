@@ -5,14 +5,12 @@ using System.Threading.Tasks;
 
 namespace LojaVeiculos.Utils
 {
-    public class Email
+    public static class Email
     {
 
             public static async Task Execute()
             {
-            //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
-            
-                var apiKey = "LojaVeiculos";
+                var apiKey = "APIKeyLojaVeiculos";
                 var client = new SendGridClient(apiKey);
                 var from = new EmailAddress("vanbarone.milani@gmail.com", "Vanessa");
                 var subject = "Teste Envio de email com SendGrid";

@@ -1,9 +1,11 @@
 ﻿using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Data;
 
 namespace LojaVeiculos.Controllers
 {
@@ -50,6 +52,7 @@ namespace LojaVeiculos.Controllers
         /// </summary>
         /// <returns>Cliente listado</returns>
         [HttpGet]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Listar()
         {
             try
@@ -74,6 +77,7 @@ namespace LojaVeiculos.Controllers
         /// <param name="id">Pegar cliente por id</param>
         /// <returns>Cliente selecionado</returns>
         [HttpGet("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult BuscarId(int id)
         {
             try
@@ -108,6 +112,7 @@ namespace LojaVeiculos.Controllers
         /// <param name="cliente">Guardar dados atualizados</param>
         /// <returns>Cliente alterado</returns>
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Alterar(int id, Cliente cliente)
         {
             try
@@ -153,6 +158,7 @@ namespace LojaVeiculos.Controllers
         /// <param name="patchCliente">Guardar cliente atualizado</param>
         /// <returns></returns>
         [HttpPatch("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument patchCliente)
         {
             try
@@ -189,6 +195,7 @@ namespace LojaVeiculos.Controllers
         /// <param name="id">Pegar cliente por id</param>
         /// <returns>Cliente deletado</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Excluir(int id)
         {
             try
@@ -216,6 +223,7 @@ namespace LojaVeiculos.Controllers
                 {
                     Error = "Falha na conexao",
                     ex.Message,
+                    Inner = ex.InnerException?.Message
                 });
             }
         }

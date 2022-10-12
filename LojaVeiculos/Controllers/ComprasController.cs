@@ -9,11 +9,11 @@ namespace LojaVeiculos.Controllers
     [Route("api/[controller]")]
     //[Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
     [ApiController]
-    public class VendasController : ControllerBase
+    public class ComprasController : ControllerBase
     {
-        IRepository<Venda> repo;
+        IRepository<Compra> repo;
 
-        public VendasController(IRepository<Venda> _repository)
+        public ComprasController(IRepository<Compra> _repository)
         {
             repo = _repository;
         }
@@ -25,6 +25,7 @@ namespace LojaVeiculos.Controllers
         /// <returns>Lista de objetos(Vendas),
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult GetAll()
         {
             try
@@ -48,6 +49,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se a venda não foi encontrada,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult GetById(int id)
         {
             try
@@ -73,14 +75,15 @@ namespace LojaVeiculos.Controllers
         /// <returns>Objeto(Venda) se a inclusão foi realizada com sucesso, 
         ///          Erro 500 se deu falha na transação</returns>
         [HttpPost]
-        public IActionResult Insert(Venda entity)
+        [Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
+        public IActionResult Insert(Compra entity)
         {
             try
             {
                 if (entity.IdCliente == 0)
                     return BadRequest(new { Error = "Informe o Id do Cliente" });
 
-                if (entity.ItensVenda.Count == 0)
+                if (entity.ItensCompra.Count == 0)
                     return BadRequest(new { Error = "Não foi informado nenhum item de venda" });
 
                 var obj = repo.Insert(entity);

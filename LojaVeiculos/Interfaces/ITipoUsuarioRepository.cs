@@ -5,10 +5,6 @@ namespace LojaVeiculos.Interfaces
 {
     public interface ITipoUsuarioRepository
     {
-        ICollection<TipoUsuario> ListarTodos();
-
-        TipoUsuario BuscarPorId(int id);
-
         TipoUsuario BuscarPorTipo(string tipo);
     }
 }

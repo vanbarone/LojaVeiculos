@@ -25,13 +25,13 @@ namespace LojaVeiculos.Repositories
         public string Logar(string email, string senha)
         {
             // Verifica se existe um usuário com email
-            var usuario = ctx.Usuario.FirstOrDefault(u => u.Email == email);
+            Usuario usuario = ctx.Usuario.Where(u => u.Email == email).FirstOrDefault();
 
             if (usuario != null && senha != null && usuario.Senha.Contains("$2b$"))
             {
                 if (BCrypt.Net.BCrypt.Verify(senha, usuario.Senha))
                 {
-                    IRepository<Usuario> repoUsuario = new UsuarioRepository(ctx);
+                    IUsuarioRepository repoUsuario = new UsuarioRepository(ctx);
                     
                     usuario = repoUsuario.FindById(usuario.Id);
                     
@@ -44,7 +44,7 @@ namespace LojaVeiculos.Repositories
                         new Claim(JwtRegisteredClaimNames.Email, usuario.Email),
                         new Claim(JwtRegisteredClaimNames.Jti,  usuario.Id.ToString()),
                         new Claim(ClaimTypes.Role, usuario.TipoUsuario.Tipo.ToUpper()),
-                        new Claim("Tipo", usuario.TipoUsuario.Tipo.ToUpper())
+                        new Claim("ID", usuario.Id.ToString())
                     };
 
                     var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("lojaVeiculos-chave-autenticacao"));
@@ -61,8 +61,8 @@ namespace LojaVeiculos.Repositories
                         );
 
                     //*** Fim das credenciais do JWT ***
-                    return new JwtSecurityTokenHandler().WriteToken(meuToken);  
 
+                    return new JwtSecurityTokenHandler().WriteToken(meuToken);  
                 }
             }
             return null;

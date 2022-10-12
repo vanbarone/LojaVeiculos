@@ -32,7 +32,7 @@ namespace LojaVeiculos.Repositories
             ctx.Cliente.Remove(entity);
 
             //Apaga tb o usuario
-            IRepository<Usuario> repo = new UsuarioRepository(ctx);
+            IUsuarioRepository repo = new UsuarioRepository(ctx);
             repo.Delete(entity.Usuario);
         }
 

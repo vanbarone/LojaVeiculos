@@ -4,11 +4,14 @@ using LojaVeiculos.Models;
 using LojaVeiculos.Interfaces;
 using System.Text.Json;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "ADMINISTRADOR")]
     public class ConcessionariasController : ControllerBase
     {
         IRepository<Concessionaria> repo;

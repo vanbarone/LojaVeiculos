@@ -25,6 +25,7 @@ namespace LojaVeiculos.Controllers
         /// <returns>Lista de objetos(Vendas),
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult GetAll()
         {
             try
@@ -48,6 +49,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se a venda não foi encontrada,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult GetById(int id)
         {
             try
@@ -73,6 +75,7 @@ namespace LojaVeiculos.Controllers
         /// <returns>Objeto(Venda) se a inclusão foi realizada com sucesso, 
         ///          Erro 500 se deu falha na transação</returns>
         [HttpPost]
+        [Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
         public IActionResult Insert(Compra entity)
         {
             try

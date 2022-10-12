@@ -53,6 +53,7 @@ namespace LojaVeiculos.Controllers
         /// </summary>
         /// <returns>Lista de usuários</returns>
         [HttpGet]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Listar()
         {
             try
@@ -117,6 +118,7 @@ namespace LojaVeiculos.Controllers
         /// <param name="entity">Todas as informações do usuário</param>
         /// <param name="id">Id do usuário</param>
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Alterar(int id, Usuario entity)
         {
             try
@@ -159,6 +161,7 @@ namespace LojaVeiculos.Controllers
         /// </summary>
         /// <returns>Dados alterados</returns>
         [HttpPatch("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument patchUsuario)
         {
             if (patchUsuario == null)
@@ -184,6 +187,7 @@ namespace LojaVeiculos.Controllers
         /// <returns>Mensagem de exclusão</returns>
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Excluir(int id)
         {
             try

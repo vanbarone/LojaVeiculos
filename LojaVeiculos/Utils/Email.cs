@@ -10,8 +10,6 @@ namespace LojaVeiculos.Utils
 
             public static async Task Execute()
             {
-            //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
-            
                 var apiKey = "LojaVeiculos";
                 var client = new SendGridClient(apiKey);
                 var from = new EmailAddress("vanbarone.milani@gmail.com", "Vanessa");

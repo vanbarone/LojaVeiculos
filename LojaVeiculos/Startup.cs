@@ -39,7 +39,21 @@ namespace LojaVeiculos
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Loja de Veículos", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Loja de Veículos",
+                    Version = "v1",
+                    Description = "Api desenvolvida para o site Mais Eventos",
+                    TermsOfService = new Uri("https://meusite.com"),
+                    Contact = new OpenApiContact
+                    {
+                        Name = "Dayra,Germana, Maria, Sara, Vanessa",
+                        Url = new Uri("https://site.com")
+                    },
+                    License = new OpenApiLicense
+                    {
+                        Name = "Edu Synq",
+                        Url = new Uri("https://site.com")
+                    }
+                });
 
                 var xmlArquivo = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlArquivo));

@@ -21,7 +21,9 @@ namespace TestesUnitarios.Models
         }
 
         [Fact]
+        public void TestValidarTipoItemCompra()
         {
+            {
             //Preparação
             ItemCompra itemCompra;
 

@@ -8,5 +8,9 @@ namespace LojaVeiculos.Interfaces
         public void Delete(Usuario entity);
 
         public Usuario FindById(int id);
+
+        public Usuario FindByEmail(string email);
+
+        public Usuario FindByEmail(string email, int id);
     }
 }

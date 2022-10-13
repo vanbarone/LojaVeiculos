@@ -16,7 +16,7 @@ namespace LojaVeiculos.Context
 
         public DbSet<Concessionaria> Concessionaria { get; set; }
         
-        public DbSet<ItemVenda> ItemVenda { get; set; }
+        public DbSet<ItemCompra> ItemCompra { get; set; }
         
         public DbSet<Marca> Marca { get; set; }
         
@@ -28,6 +28,6 @@ namespace LojaVeiculos.Context
 
         public DbSet<Veiculo> Veiculo { get; set; }
 
-        public DbSet<Venda> Venda { get; set; }
+        public DbSet<Compra> Compra { get; set; }
     }
 }

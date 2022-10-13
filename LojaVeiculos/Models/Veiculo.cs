@@ -1,7 +1,5 @@
-﻿using LojaVeiculos.Enuns;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Data.Common;
 using System.Text.Json.Serialization;
 
 namespace LojaVeiculos.Models
@@ -20,7 +18,8 @@ namespace LojaVeiculos.Models
 
         [Required]
         [StringLength(30)]
-        public VeiculoEnum.Cor Cor { get; set; }
+        public string Cor { get; set; }
+        //public VeiculoEnum.Cor Cor { get; set; }
 
         [Required]
         [Column(TypeName = "decimal(10,1)")]
@@ -30,20 +29,15 @@ namespace LojaVeiculos.Models
         [Column(TypeName = "decimal(10,2)")]
         public decimal Valor { get; set; }
 
-        [Required]
-        [StringLength(30)]
-        public VeiculoEnum.TpCombustivel TpCombustivel { get; set; }
-
-        [Required]
-        [StringLength(30)]
-        public VeiculoEnum.Status Status { get; set; }
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        public string Status { get; set; }
 
         [Required]
         [ForeignKey("Concessionaria")]
         public int IdConcessionaria { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public Concessionaria concessionaria { get; set; }
+        public Concessionaria Concessionaria { get; set; }
 
         [Required]
         [ForeignKey("Modelo")]

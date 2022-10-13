@@ -39,7 +39,14 @@ namespace LojaVeiculos
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "LojaVeiculos", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                        Title = "BuyCar", 
+                        Version = "1.0",
+                        Description = "Loja online para compra de veículos",
+                        Contact = new OpenApiContact { Name = "(Dayra, Germana, Maria, Sara, Vanessa)", Email = "contato@lojaveiculos.com.br"},
+                        License = new OpenApiLicense { Name = "EduSync", Url = new Uri("https://edusync.com.br/") }
+                
+                });
 
                 var xmlArquivo = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlArquivo));
@@ -81,7 +88,18 @@ namespace LojaVeiculos
             );
 
             services.AddTransient<LojaVeiculosContext, LojaVeiculosContext>();
-            services.AddTransient<IRepository<Veiculo>, VeiculoRepositorie>();
+            services.AddTransient<IRepository<Usuario>, AdministradorRepository>();
+            services.AddTransient<ICartaoRepository, CartaoRepository>();
+            services.AddTransient<IRepository<Cliente>, ClienteRepository>();
+            services.AddTransient<IRepository<Concessionaria>, ConcessionariaRepository>();
+            services.AddTransient<ILoginRepository, LoginRepository>();
+            services.AddTransient<IRepository<Marca>, MarcaRepository>();
+            services.AddTransient<IRepository<Modelo>, ModeloRepository>();
+            services.AddTransient<ITipoUsuarioRepository, TipoUsuarioRepository>();
+            services.AddTransient<IVeiculoRepository, VeiculoRepository>();
+            services.AddTransient<IRepository<Compra>, CompraRepository>();
+            services.AddTransient<IUsuarioRepository, UsuarioRepository>();
+
 
             //Config JWT
             services.AddAuthentication(options =>
@@ -96,10 +114,10 @@ namespace LojaVeiculos
                     ValidateIssuer = true,
                     ValidateAudience = true,
                     ValidateLifetime = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("cripto-chave-autenticacao")),
+                    IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes("lojaVeiculos-chave-autenticacao")),
                     ClockSkew = TimeSpan.FromMinutes(10),
-                    ValidIssuer = "cripto.webAPI",
-                    ValidAudience = "cripto.webAPI"
+                    ValidIssuer = "lojaVeiculos.webAPI",
+                    ValidAudience = "lojaVeiculos.webAPI"
                 };
             });
 
@@ -108,12 +126,18 @@ namespace LojaVeiculos
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LojaVeiculos v1"));
             }
+
+            app.UseSwagger(c =>
+            {
+                c.SerializeAsV2 = true;
+            });
+
 
             app.UseHttpsRedirection();
 

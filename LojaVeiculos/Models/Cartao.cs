@@ -14,14 +14,17 @@ namespace LojaVeiculos.Models
 
         
         [Required(ErrorMessage = "Insira o nome do titular")]
+        [StringLength(60)]
         public string Titular { get; set; }
 
 
         [Required]
+        [StringLength(20)]
         public string Bandeira { get; set; }
 
 
-        [Required(ErrorMessage = "Insira o nome do titular")]
+        [Required(ErrorMessage = "Insira o cpf do titular")]
+        [StringLength(15)]
         public string Cpf { get; set; }
 
 
@@ -30,10 +33,11 @@ namespace LojaVeiculos.Models
 
 
         [Required]
-        public string AnoVencimento { get; set; }
+        public int AnoVencimento { get; set; }
 
 
         [Required]
+        [StringLength(5)]
         public string CodSeguranca { get; set; }
 
 

@@ -27,11 +27,13 @@ namespace LojaVeiculos.Models
         public string Celular { get; set; }
 
         [Required(ErrorMessage = "Informe seu email")]
+        [EmailAddress]
         [StringLength(255)]
-        [RegularExpression(".+\\@.+\\..+", ErrorMessage = "Informe um email válido...")]
+        //[RegularExpression(".+\\@.+\\..+", ErrorMessage = "Informe um email válido...")]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Informe sua senha")]
+        [DataType(DataType.Password)]
         [MinLength(4)]
         public string Senha { get; set; }
 

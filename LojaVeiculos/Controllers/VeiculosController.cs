@@ -8,7 +8,7 @@ using System;
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "ADMINISTRADOR")]
+    //[Authorize(Roles = "ADMINISTRADOR")]
     [ApiController]
     public class VeiculosController : ControllerBase
     {
@@ -49,6 +49,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
         public IActionResult GetById(int id)
         {
             try
@@ -75,6 +76,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet("Buscar/{placa}")]
+        [Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
         public IActionResult GetByPlaca(string placa)
         {
             try
@@ -100,10 +102,14 @@ namespace LojaVeiculos.Controllers
         /// <returns>Objeto(Veiculo) se a inclusão foi realizada com sucesso, 
         ///          Erro 500 se deu falha na transação</returns>
         [HttpPost]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Insert(Veiculo entity)
         {
             try
             {
+                if (entity.IdModelo == 0)
+                    return BadRequest(new { Error = "Informe o Id do Modelo" });
+
                 var obj = repo.Insert(entity);
 
                 return Ok(obj);
@@ -125,18 +131,21 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Update(int id, Veiculo entity)
         {
             try
             {
+                //Verifica se o id foi informado no corpo do objeto
+                if (entity.Id == null || entity.Id == 0)
+                    return BadRequest("Informe o campo 'id' no corpo do objeto (ex.: 'id': 1)");
+
                 //verifica se o id informado é diferente do id da entidade
                 if (id != entity.Id)
                     return BadRequest(new { message = "Dados não conferem (id da entidade é diferente do id informado)" });
 
-                //verifica se existe o registro no banco de dados
-                var obj = repo.FindById(id);
-
-                if (obj == null)
+                //Verifica se existe registro com o id informado
+                if (repo.FindById(id) == null)
                     return NotFound(new { message = "Não existe registro cadastrado com esse 'id'" });
 
                 //Efetua a alteração
@@ -161,6 +170,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpPatch("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult UpdatePatch(int id, [FromBody] JsonPatchDocument patch)
         {
             try
@@ -177,7 +187,7 @@ namespace LojaVeiculos.Controllers
                 //Efetua a alteração
                 repo.UpdatePartial(patch, obj);
 
-                return Ok(new { Msg = "Dados alterados com sucesso" });
+                return Ok(obj);
             }
             catch (Exception ex)
             {
@@ -194,6 +204,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Delete(int id)
         {
             try

@@ -1,5 +1,4 @@
-﻿using LojaVeiculos.Enuns;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
@@ -8,19 +7,35 @@ using System.Collections.Generic;
 
 namespace LojaVeiculos.Models
 {
-    public class Venda
+    public class Compra
     {
         [Key]
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]     //não mostra esse campo no json na inserção e alteração
         public int Id { get; set; }
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         [Required]
         public DateTime Data { get; set; }
 
+
+        [Required]
+        [ForeignKey("Cliente")]
+        public int IdCliente { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        public Cliente Cliente { get; set; }
+
+        public ICollection<ItemCompra> ItensCompra { get; set; }
+
+        
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         [Column(TypeName = "decimal(10,2)")]
         public decimal VlTotal { get; set; }
 
-        public VendaEnum.FormaPagto FormaPagto { get; set; }
+
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
+        public string FormaPagto { get; set; }
+
 
         [Required]
         [StringLength(255)]
@@ -29,7 +44,7 @@ namespace LojaVeiculos.Models
 
         [Required(ErrorMessage = "Insira o numero do cartao")]
         [StringLength(20)]
-        //[RegularExpression("4[0-9]{12}(?:[0-9]{3})", ErrorMessage = "Insira um numero valido")]
+        //[RegularExpression("4[0-9]{12}(?:[0-9]{3})", ErrorMessage = "Insira um número de cartão válido")]
         public string CartaoNumero { get; set; }
 
 
@@ -52,17 +67,7 @@ namespace LojaVeiculos.Models
 
 
         [Required]
-        public int CartaoCodSeguranca { get; set; }
+        public string CartaoCodSeguranca { get; set; }
 
-
-        [Required]
-        [ForeignKey("Cliente")]
-        public int IdCliente { get; set; }
-
-        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public Cliente Cliente { get; set; }
-
-
-        public ICollection<ItemVenda> ItensVenda { get; set; }
     }
 }

@@ -2,26 +2,29 @@
 using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
 using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace LojaVeiculos.Repositories
 {
-    public class TipoUsuarioRepository : ITipoUsuarioRepository
+    public class CartaoRepository : ICartaoRepository
     {
-
         LojaVeiculosContext ctx;
 
-        public TipoUsuarioRepository(LojaVeiculosContext _ctx)
+        public CartaoRepository(LojaVeiculosContext _ctx)
         {
             ctx = _ctx;
         }
 
 
-        public TipoUsuario BuscarPorTipo(string tipo)
+        public Cartao Insert(Cartao entity)
         {
-            return ctx.TipoUsuario.FirstOrDefault(t => t.Tipo == tipo);
-        }
+            ctx.Cartao.Add(entity);
 
+            ctx.SaveChanges();
+
+            return entity;
+        }
     }
 }

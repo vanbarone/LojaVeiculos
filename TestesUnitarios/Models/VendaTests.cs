@@ -6,26 +6,26 @@ namespace TestesUnitarios.Models
     public class VendaTests
     {
         [Fact]
-        public void TestRetornarVendaNotNull()
+        public void TestRetornarCompraNotNull()
         {
             //Preparação
-            Venda venda;
+            Compra compra;
 
             //Execução
-            venda = new Venda();
+            compra = new Compra();
 
             // Retorno esperado
-            Assert.NotNull(venda);
-            Assert.Equal(venda.Id, venda.Id);
-            Assert.Equal(venda.Data, venda.Data);
-            Assert.Equal(venda.IdCliente, venda.IdCliente);
-            Assert.Equal(venda.Cliente, venda.Cliente);
-            Assert.Equal(venda.CartaoCpf, venda.CartaoCpf);
+            Assert.NotNull(compra);
+            Assert.Equal(compra.Id, compra.Id);
+            Assert.Equal(compra.Data, compra.Data);
+            Assert.Equal(compra.IdCliente, compra.IdCliente);
+            Assert.Equal(compra.Cliente, compra.Cliente);
+            Assert.Equal(compra.CartaoCpf, compra.CartaoCpf);
            
-            Assert.True(venda.Id == venda.Id);
-            Assert.True(venda.Data == venda.Data);
-            Assert.True(venda.Cliente == venda.Cliente);
-            Assert.True(venda.CartaoCpf == venda.CartaoCpf);
+            Assert.True(compra.Id == compra.Id);
+            Assert.True(compra.Data == compra.Data);
+            Assert.True(compra.Cliente == compra.Cliente);
+            Assert.True(compra.CartaoCpf == compra.CartaoCpf);
         }
     }
 }

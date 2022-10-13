@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace LojaVeiculos.Models
 {
-    public class ItemVenda
+    public class ItemCompra
     {
         [Key]
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]     //não mostra esse campo no json na inserção e alteração
@@ -20,11 +20,12 @@ namespace LojaVeiculos.Models
         public Veiculo Veiculo { get; set; }
 
 
+        [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
         [Required]
-        [ForeignKey("Venda")]
-        public int IdVenda { get; set; }
+        [ForeignKey("Compra")]
+        public int IdCompra { get; set; }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.Never)]
-        public Venda Venda { get; set; }
+        public Compra Compra { get; set; }
     }
 }

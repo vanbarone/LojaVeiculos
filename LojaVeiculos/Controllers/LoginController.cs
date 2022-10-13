@@ -2,6 +2,8 @@
 using LojaVeiculos.Utils;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Threading.Tasks;
 
 namespace LojaVeiculos.Controllers
 {
@@ -35,13 +37,46 @@ namespace LojaVeiculos.Controllers
         /// <summary>
         /// Envia email para recuperação de senha
         /// </summary>
-        [HttpGet]
-        public IActionResult RecuperarSenha(string email)
+        [HttpGet("RecuperarSenha/{email}")]
+        public async Task<IActionResult> RecuperarSenha(string email)
         {
-            Email.Execute().Wait();
+            if (email == "" || email == null)
+                return BadRequest("Email não informado");
+
+            var retorno = repo.RecuperarSenha(email);
+
+            await retorno;
+            
+            if (retorno.IsCompletedSuccessfully)
+                return Ok("Email enviado com sucesso");
+            else
+                return BadRequest(retorno.Status.ToString());
+        }
 
 
-            return Ok("Email enviado com sucesso");
+        [HttpPut("RedefinirSenha")]
+        public IActionResult RedefinirSenha(string email, string codigo, string novaSenha)
+        {
+            if (email == "" || email == null)
+                return BadRequest("Email não informado");
+
+            if (codigo == "" || codigo == null)
+                return BadRequest("Código não informado");
+
+            if (novaSenha == "" || novaSenha == null)
+                return BadRequest("Nova senha não informada");
+
+
+            try
+            {
+                repo.RedefinirSenha(email, codigo, novaSenha);
+
+                return Ok("Senha alterada com sucesso");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Error = "Falha na transação", Message = ex.Message });
+            }
         }
     }
 }

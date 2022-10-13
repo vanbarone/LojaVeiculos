@@ -35,9 +35,9 @@ namespace TestesUnitarios.Controllers
             // Execução
             var Result = control.GetAll();
             var ResultOk = Result as OkObjectResult;
-            ResultOk.Value = new List<Veiculo>();
+            ResultOk.Value = new List<Concessionaria>();
             // Retorno
-            Assert.IsAssignableFrom<List<Veiculo>>(ResultOk.Value);
+            Assert.IsAssignableFrom<List<Concessionaria>>(ResultOk.Value);
         }
 
         [Fact]

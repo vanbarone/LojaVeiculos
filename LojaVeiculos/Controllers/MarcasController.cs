@@ -2,11 +2,14 @@
 using Microsoft.AspNetCore.Mvc;
 using LojaVeiculos.Models;
 using LojaVeiculos.Interfaces;
+using Microsoft.AspNetCore.Authorization;
+using System.Data;
 
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(Roles = "ADMINISTRADOR")]
     public class MarcasController : ControllerBase
     {
         IRepository<Marca> repo;
@@ -41,7 +44,7 @@ namespace LojaVeiculos.Controllers
         }
 
        /// <summary>
-       /// Cadastrar todas as Marcas
+       /// Cadastrar uma nova Marca.
        /// </summary>
        /// <param name="entity"></param>
        /// <returns></returns>
@@ -66,7 +69,7 @@ namespace LojaVeiculos.Controllers
         }
 
         /// <summary>
-        /// Buscar por Id a Concessionária
+        /// Buscar por Id uma Marca.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -96,21 +99,32 @@ namespace LojaVeiculos.Controllers
 
 
         /// <summary>
-        /// Alterar a marca
+        /// Alterar uma marca.
         /// </summary>
         /// <param name="id"></param>
         /// <param name="marca"></param>
         /// <returns></returns>
         [HttpPut]
-        public IActionResult Alterar(int id, Marca marca)
+        public IActionResult Alterar(int id, Marca entity)
         {
             try
             {
-                if (id != marca.Id)
-                    return BadRequest();
+                //Verifica se o id foi informado no corpo do objeto
+                if (entity.Id == null || entity.Id == 0)
+                    return BadRequest("Informe o campo 'id' no corpo do objeto (ex.: 'id': 1)");
 
-                repo.Update(marca);
-                return NoContent();
+                //verifica se o id informado é diferente do id da entidade
+                if (id != entity.Id)
+                    return BadRequest(new { message = "Dados não conferem (id da entidade é diferente do id informado)" });
+
+                //Verifica se existe registro com o id informado
+                if (repo.FindById(id) == null)
+                    return NotFound(new { message = "Não existe registro cadastrado com esse 'id'" });
+
+                //
+                repo.Update(entity);
+
+                return Ok(new { Message = "Registro alterado com sucesso" });
             }
             catch (System.Exception ex)
             {
@@ -127,7 +141,7 @@ namespace LojaVeiculos.Controllers
      
           
         /// <summary>
-        /// Deletatar uma Marca
+        /// Deletar uma Marca
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -142,7 +156,8 @@ namespace LojaVeiculos.Controllers
                 { return NotFound(new { Message = "Marca não encontrada" }); }
 
                 repo.Delete(busca);
-                return NoContent();
+
+                return Ok(new { Msg = "Registro excluído com sucesso" });
             }
             catch (System.Exception ex)
             {
@@ -150,7 +165,8 @@ namespace LojaVeiculos.Controllers
                 return StatusCode(500, new
                 {
                     Error = "Falha na transação",
-                    Message = ex.Message
+                    Message = ex.Message,
+                    Inner = ex.InnerException?.Message
                 });
             }
         }

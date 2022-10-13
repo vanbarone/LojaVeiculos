@@ -16,20 +16,12 @@ namespace LojaVeiculos.Repositories
         {
             ctx = _ctx;
         }
-        public TipoUsuario BuscarPorId(int id)
-        {
-            return ctx.TipoUsuario.Find(id);
-        }
+
 
         public TipoUsuario BuscarPorTipo(string tipo)
         {
             return ctx.TipoUsuario.FirstOrDefault(t => t.Tipo == tipo);
         }
 
-        public ICollection<TipoUsuario> ListarTodos()
-        {
-            // Utiliza o linq para listar os tipos de usuários
-            return ctx.TipoUsuario.ToList();
-        }
     }
 }

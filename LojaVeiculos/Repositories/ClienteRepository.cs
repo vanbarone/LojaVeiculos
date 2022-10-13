@@ -1,9 +1,11 @@
 ﻿using LojaVeiculos.Context;
 using LojaVeiculos.Interfaces;
 using LojaVeiculos.Models;
+using LojaVeiculos.Utils;
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 
 namespace LojaVeiculos.Repositories
@@ -18,10 +20,19 @@ namespace LojaVeiculos.Repositories
         }
         public void Delete(Cliente entity)
         {
+            //Checa constraint - Não deixa excluir se tiver filhos
+            var query = from item in ctx.Compra
+                        where item.IdCliente == entity.Id
+                        select item.Id;
+            if (query.Count() > 0)
+                throw new ConstraintException("Exclusão inválida (Existem compras cadastradas com esse cliente)");
+
+
+            //
             ctx.Cliente.Remove(entity);
 
             //Apaga tb o usuario
-            IRepository<Usuario> repo = new UsuarioRepository(ctx);
+            IUsuarioRepository repo = new UsuarioRepository(ctx);
             repo.Delete(entity.Usuario);
         }
 
@@ -45,7 +56,7 @@ namespace LojaVeiculos.Repositories
         {
             //Pega o id do TipoUsuario 'Cliente'
             ITipoUsuarioRepository repo = new TipoUsuarioRepository(ctx);
-            var tipo = repo.BuscarPorTipo("Cliente");
+            var tipo = repo.BuscarPorTipo(Util.TpUsuario_Cliente);
 
             entity.Usuario.IdTipoUsuario = tipo.Id;   
 

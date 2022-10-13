@@ -89,7 +89,7 @@ namespace LojaVeiculos.Migrations
                     CPF = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     Celular = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Email = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Senha = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IdTipoUsuario = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -114,7 +114,7 @@ namespace LojaVeiculos.Migrations
                     Cor = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Km = table.Column<decimal>(type: "decimal(10,1)", nullable: false),
                     Valor = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
+                    Status = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IdConcessionaria = table.Column<int>(type: "int", nullable: false),
                     IdModelo = table.Column<int>(type: "int", nullable: false)
                 },
@@ -141,8 +141,8 @@ namespace LojaVeiculos.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    AceitaTermoUso = table.Column<bool>(type: "bit", nullable: false),
-                    IdUsuario = table.Column<int>(type: "int", nullable: false)
+                    IdUsuario = table.Column<int>(type: "int", nullable: false),
+                    AceitaTermoUso = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -160,12 +160,12 @@ namespace LojaVeiculos.Migrations
                 columns: table => new
                 {
                     Numero = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Titular = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Bandeira = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Cpf = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Titular = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
+                    Bandeira = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Cpf = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     MesVencimento = table.Column<int>(type: "int", nullable: false),
-                    AnoVencimento = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CodSeguranca = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AnoVencimento = table.Column<int>(type: "int", nullable: false),
+                    CodSeguranca = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: false),
                     IdCliente = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -180,28 +180,28 @@ namespace LojaVeiculos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Venda",
+                name: "Compra",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Data = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IdCliente = table.Column<int>(type: "int", nullable: false),
                     VlTotal = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    FormaPagto = table.Column<int>(type: "int", nullable: false),
+                    FormaPagto = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CartaoTitular = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     CartaoNumero = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CartaoBandeira = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     CartaoCpf = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
                     CartaoMesVencimento = table.Column<int>(type: "int", nullable: false),
                     CartaoAnoVencimento = table.Column<int>(type: "int", nullable: false),
-                    CartaoCodSeguranca = table.Column<int>(type: "int", nullable: false),
-                    IdCliente = table.Column<int>(type: "int", nullable: false)
+                    CartaoCodSeguranca = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Venda", x => x.Id);
+                    table.PrimaryKey("PK_Compra", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Venda_Cliente_IdCliente",
+                        name: "FK_Compra_Cliente_IdCliente",
                         column: x => x.IdCliente,
                         principalTable: "Cliente",
                         principalColumn: "Id",
@@ -209,27 +209,27 @@ namespace LojaVeiculos.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ItemVenda",
+                name: "ItemCompra",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     IdVeiculo = table.Column<int>(type: "int", nullable: false),
-                    IdVenda = table.Column<int>(type: "int", nullable: false)
+                    IdCompra = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ItemVenda", x => x.Id);
+                    table.PrimaryKey("PK_ItemCompra", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ItemVenda_Veiculo_IdVeiculo",
-                        column: x => x.IdVeiculo,
-                        principalTable: "Veiculo",
+                        name: "FK_ItemCompra_Compra_IdCompra",
+                        column: x => x.IdCompra,
+                        principalTable: "Compra",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ItemVenda_Venda_IdVenda",
-                        column: x => x.IdVenda,
-                        principalTable: "Venda",
+                        name: "FK_ItemCompra_Veiculo_IdVeiculo",
+                        column: x => x.IdVeiculo,
+                        principalTable: "Veiculo",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -245,14 +245,19 @@ namespace LojaVeiculos.Migrations
                 column: "IdUsuario");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemVenda_IdVeiculo",
-                table: "ItemVenda",
-                column: "IdVeiculo");
+                name: "IX_Compra_IdCliente",
+                table: "Compra",
+                column: "IdCliente");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ItemVenda_IdVenda",
-                table: "ItemVenda",
-                column: "IdVenda");
+                name: "IX_ItemCompra_IdCompra",
+                table: "ItemCompra",
+                column: "IdCompra");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ItemCompra_IdVeiculo",
+                table: "ItemCompra",
+                column: "IdVeiculo");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Modelo_IdMarca",
@@ -273,11 +278,6 @@ namespace LojaVeiculos.Migrations
                 name: "IX_Veiculo_IdModelo",
                 table: "Veiculo",
                 column: "IdModelo");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Venda_IdCliente",
-                table: "Venda",
-                column: "IdCliente");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -286,13 +286,16 @@ namespace LojaVeiculos.Migrations
                 name: "Cartao");
 
             migrationBuilder.DropTable(
-                name: "ItemVenda");
+                name: "ItemCompra");
+
+            migrationBuilder.DropTable(
+                name: "Compra");
 
             migrationBuilder.DropTable(
                 name: "Veiculo");
 
             migrationBuilder.DropTable(
-                name: "Venda");
+                name: "Cliente");
 
             migrationBuilder.DropTable(
                 name: "Concessionaria");
@@ -301,13 +304,10 @@ namespace LojaVeiculos.Migrations
                 name: "Modelo");
 
             migrationBuilder.DropTable(
-                name: "Cliente");
+                name: "Usuario");
 
             migrationBuilder.DropTable(
                 name: "Marca");
-
-            migrationBuilder.DropTable(
-                name: "Usuario");
 
             migrationBuilder.DropTable(
                 name: "TipoUsuario");

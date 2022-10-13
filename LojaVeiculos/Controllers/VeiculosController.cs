@@ -8,7 +8,7 @@ using System;
 namespace LojaVeiculos.Controllers
 {
     [Route("api/[controller]")]
-    [Authorize(Roles = "ADMINISTRADOR")]
+    //[Authorize(Roles = "ADMINISTRADOR")]
     [ApiController]
     public class VeiculosController : ControllerBase
     {
@@ -49,6 +49,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
         public IActionResult GetById(int id)
         {
             try
@@ -75,6 +76,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet("Buscar/{placa}")]
+        [Authorize(Roles = "ADMINISTRADOR, CLIENTE")]
         public IActionResult GetByPlaca(string placa)
         {
             try
@@ -100,6 +102,7 @@ namespace LojaVeiculos.Controllers
         /// <returns>Objeto(Veiculo) se a inclusão foi realizada com sucesso, 
         ///          Erro 500 se deu falha na transação</returns>
         [HttpPost]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Insert(Veiculo entity)
         {
             try
@@ -128,6 +131,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpPut("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Update(int id, Veiculo entity)
         {
             try
@@ -166,6 +170,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpPatch("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult UpdatePatch(int id, [FromBody] JsonPatchDocument patch)
         {
             try
@@ -199,6 +204,7 @@ namespace LojaVeiculos.Controllers
         ///          NOT FOUND se o veículo não foi encontrado,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpDelete("{id}")]
+        [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Delete(int id)
         {
             try

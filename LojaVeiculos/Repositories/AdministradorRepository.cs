@@ -47,6 +47,12 @@ namespace LojaVeiculos.Repositories
         {
             //só permite incluir usuário do tipo 'administrador'
 
+            //Verifica se já tem usuário cadastrado com o email informado
+            IUsuarioRepository repoUsuario = new UsuarioRepository(ctx);
+            if (repoUsuario.FindByEmail(entity.Email) != null)
+                throw new ConstraintException("Já existe um usuário cadastrado com esse email");
+
+
             //Pega o id do TipoUsuario 'Administrador'            
             ITipoUsuarioRepository repo = new TipoUsuarioRepository(ctx);
             var tipo = repo.BuscarPorTipo(Util.TpUsuario_Administrador);
@@ -83,6 +89,12 @@ namespace LojaVeiculos.Repositories
                 throw new ConstraintException("Administrador não cadastrado'");
             }
 
+            //Verifica se já tem usuário cadastrado com o email informado
+            IUsuarioRepository repoUsuario = new UsuarioRepository(ctx);
+            if (repoUsuario.FindByEmail(entity.Email, entity.Id) != null)
+                throw new ConstraintException("Já existe um usuário cadastrado com esse email");
+
+
 
             //criptografa a senha
             if (entity != null)
@@ -108,6 +120,12 @@ namespace LojaVeiculos.Repositories
             {
                 throw new ConstraintException("Administrador não cadastrado'");
             }
+
+            //Verifica se já tem usuário cadastrado com o email informado
+            IUsuarioRepository repoUsuario = new UsuarioRepository(ctx);
+            if (repoUsuario.FindByEmail(entity.Email, entity.Id) != null)
+                throw new ConstraintException("Já existe um usuário cadastrado com esse email");
+
 
             //criptografa a senha
             if (entity != null)

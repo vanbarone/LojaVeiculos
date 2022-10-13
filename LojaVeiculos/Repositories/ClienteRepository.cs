@@ -54,6 +54,12 @@ namespace LojaVeiculos.Repositories
 
         public Cliente Insert(Cliente entity)
         {
+            //Verifica se já tem usuário cadastrado com o email informado
+            IUsuarioRepository repoUsuario = new UsuarioRepository(ctx);
+            if (repoUsuario.FindByEmail(entity.Usuario.Email) != null)
+                throw new ConstraintException("Já existe um usuário cadastrado com esse email");
+
+
             //Pega o id do TipoUsuario 'Cliente'
             ITipoUsuarioRepository repo = new TipoUsuarioRepository(ctx);
             var tipo = repo.BuscarPorTipo(Util.TpUsuario_Cliente);
@@ -76,6 +82,12 @@ namespace LojaVeiculos.Repositories
 
         public void Update(Cliente entity)
         {
+            //Verifica se já tem usuário cadastrado com o email informado
+            IUsuarioRepository repoUsuario = new UsuarioRepository(ctx);
+            if (repoUsuario.FindByEmail(entity.Usuario.Email, entity.Usuario.Id) != null)
+                throw new ConstraintException("Já existe um usuário cadastrado com esse email");
+
+
             //criptografa a senha
             if (entity != null)
                 entity.Usuario.Senha = BCrypt.Net.BCrypt.HashPassword(entity.Usuario.Senha);
@@ -88,6 +100,12 @@ namespace LojaVeiculos.Repositories
 
         public void UpdatePartial(JsonPatchDocument patch, Cliente entity)
         {
+            //Verifica se já tem usuário cadastrado com o email informado
+            IUsuarioRepository repoUsuario = new UsuarioRepository(ctx);
+            if (repoUsuario.FindByEmail(entity.Usuario.Email, entity.Usuario.Id) != null)
+                throw new ConstraintException("Já existe um usuário cadastrado com esse email");
+
+
             patch.ApplyTo(entity);
 
             //criptografa a senha

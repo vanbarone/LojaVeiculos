@@ -20,9 +20,9 @@ namespace LojaVeiculos.Controllers
 
 
         /// <summary>
-        /// Lista todas as vendas cadastrados
+        /// Lista todas as compras cadastradas
         /// </summary>
-        /// <returns>Lista de objetos(Vendas),
+        /// <returns>Lista de objetos(Compras),
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet]
         [Authorize(Roles = "ADMINISTRADOR")]
@@ -42,11 +42,11 @@ namespace LojaVeiculos.Controllers
 
 
         /// <summary>
-        /// Mostra a venda cadastrada com o id informado
+        /// Mostra a compra cadastrada com o id informado
         /// </summary>
-        /// <param name="id">Id da venda</param>
-        /// <returns>Objeto(Venda) se a venda foi encontrada, 
-        ///          NOT FOUND se a venda não foi encontrada,
+        /// <param name="id">Id da compra</param>
+        /// <returns>Objeto(Compra) se a compra foi encontrada, 
+        ///          NOT FOUND se a compra não foi encontrada,
         ///          Erro 500 se deu falha na transação</returns>
         [HttpGet("{id}")]
         [Authorize(Roles = "ADMINISTRADOR")]
@@ -69,10 +69,10 @@ namespace LojaVeiculos.Controllers
 
 
         /// <summary>
-        /// Cadastra uma nova venda
+        /// Cadastra uma nova compra
         /// </summary>
-        /// <param name="entity">Objeto(Venda) com todos os dados da venda</param>
-        /// <returns>Objeto(Venda) se a inclusão foi realizada com sucesso, 
+        /// <param name="entity">Objeto(Compra) com todos os dados da compra</param>
+        /// <returns>Objeto(Compra) se a inclusão foi realizada com sucesso, 
         ///          Erro 500 se deu falha na transação</returns>
         [HttpPost]
         [Authorize(Roles = "ADMINISTRADOR, CLIENTE")]

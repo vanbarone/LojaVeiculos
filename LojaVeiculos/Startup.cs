@@ -39,7 +39,14 @@ namespace LojaVeiculos
 
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Loja de Veículos", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { 
+                        Title = "BuyCar", 
+                        Version = "1.0",
+                        Description = "Loja online para compra de veículos",
+                        Contact = new OpenApiContact { Name = "(Dayra, Germana, Maria, Sara, Vanessa)", Email = "contato@lojaveiculos.com.br"},
+                        License = new OpenApiLicense { Name = "EduSync", Url = new Uri("https://edusync.com.br/") }
+                
+                });
 
                 var xmlArquivo = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlArquivo));
@@ -119,12 +126,18 @@ namespace LojaVeiculos
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
+            if (env.IsDevelopment() || env.IsProduction())
             {
                 app.UseDeveloperExceptionPage();
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "LojaVeiculos v1"));
             }
+
+            app.UseSwagger(c =>
+            {
+                c.SerializeAsV2 = true;
+            });
+
 
             app.UseHttpsRedirection();
 

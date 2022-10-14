@@ -23,7 +23,7 @@ namespace LojaVeiculos.Models
         public string Bandeira { get; set; }
 
 
-        [Required(ErrorMessage = "Insira o nome do titular")]
+        [Required(ErrorMessage = "Insira o cpf do titular")]
         [StringLength(15)]
         public string Cpf { get; set; }
 

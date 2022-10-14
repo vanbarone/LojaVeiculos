@@ -20,7 +20,7 @@ namespace LojaVeiculos.Controllers
         }
 
         /// <summary>
-        /// Logar usuario na aplicação
+        /// Realiza o login do usuário
         /// </summary>
         [HttpPost]
         public IActionResult Logar(string email, string senha)
@@ -28,14 +28,14 @@ namespace LojaVeiculos.Controllers
             var logar = repo.Logar(email, senha);
 
             if (logar == null)
-                return Unauthorized("você não tem permissão para acesar esse recurso");
+                return Unauthorized("Você não tem permissão para fazer login");
 
             return Ok(new { token = logar });
         }
 
 
         /// <summary>
-        /// Envia email para recuperação de senha
+        /// Gera código e envia email para redefinição da senha
         /// </summary>
         [HttpGet("RecuperarSenha/{email}")]
         public async Task<IActionResult> RecuperarSenha(string email)
@@ -54,6 +54,9 @@ namespace LojaVeiculos.Controllers
         }
 
 
+        /// <summary>
+        /// Efetua a redefinição da senha
+        /// </summary>
         [HttpPut("RedefinirSenha")]
         public IActionResult RedefinirSenha(string email, string codigo, string novaSenha)
         {

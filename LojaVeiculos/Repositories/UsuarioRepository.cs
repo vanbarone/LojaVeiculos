@@ -36,5 +36,18 @@ namespace LojaVeiculos.Repositories
                             .FirstOrDefault(u => u.Id == id);
         }
 
+        public Usuario FindByEmail(string email)
+        {
+            return ctx.Usuario
+                            .Include(t => t.TipoUsuario)
+                            .FirstOrDefault(u => u.Email == email);
+        }
+
+        public Usuario FindByEmail(string email, int id)
+        {
+            return ctx.Usuario
+                            .Include(t => t.TipoUsuario)
+                            .FirstOrDefault(u => u.Email == email && u.Id != id);
+        }
     }
 }

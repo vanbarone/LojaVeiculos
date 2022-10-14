@@ -22,10 +22,11 @@ namespace LojaVeiculos.Controllers
         }
 
         /// <summary>
-        /// Cadastra usuario
+        /// Cadastra um administrador
         /// </summary>
-        /// <param name="entity">Dados do usuario</param>
-        /// <returns>Dados do usuario cadastrado</returns>
+        /// <param name="entity">Dados do administrador</param>
+        /// <returns>Objeto(administrador),
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpPost]
         public IActionResult Cadastrar(Usuario entity)
         {
@@ -49,9 +50,10 @@ namespace LojaVeiculos.Controllers
 
 
         /// <summary>
-        /// Lista todos os usuários cadastrados
+        /// Lista todos os administradores cadastrados
         /// </summary>
-        /// <returns>Lista de usuários</returns>
+        /// <returns>Lista de objetos(administrador),
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpGet]
         [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Listar()
@@ -74,12 +76,14 @@ namespace LojaVeiculos.Controllers
                 });
             }
         }
-        
-        
+
+
         /// <summary>
-        /// Busca todos os suários cadastradas por id
+        /// Mostra o administrador cadastrado com o Id informado
         /// </summary>
-        /// <returns>Lista de usuários</returns>
+        /// <returns>Objeto(Administrador) se o administrador foi encontrado, 
+        ///          NOT FOUND se o administrador não foi encontrado,
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpGet("{id}")]
         public IActionResult BuscarUsuarioPorID(int id)
         {
@@ -110,13 +114,17 @@ namespace LojaVeiculos.Controllers
                 });
             }
         }
-       
-        
+
+
         /// <summary>
-        /// Alterar os dados do usuário
+        /// Alterar todos os dados de um administrador
         /// </summary>
-        /// <param name="entity">Todas as informações do usuário</param>
-        /// <param name="id">Id do usuário</param>
+        /// <param name="entity">Objeto(Administrador) com todos os dados do administrador</param>
+        /// <param name="id">Id do administrador</param>
+        /// <returns>Mensagem("Registro alterado com sucesso" se a alteração foi realizada com sucesso, 
+        ///          BAD REQUEST se o id não foi informado no corpo do objeto ou se o id informado e o id do administrador forem diferentes,
+        ///          NOT FOUND se o administrador não foi encontrado,
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpPut("{id}")]
         [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Alterar(int id, Usuario entity)
@@ -124,7 +132,7 @@ namespace LojaVeiculos.Controllers
             try
             {
                 //Verifica se o id foi informado no corpo do objeto
-                if (entity.Id == null || entity.Id == 0)
+                if (entity.Id == 0)
                     return BadRequest("Informe o campo 'id' no corpo do objeto (ex.: 'id': 1)");
 
                 // Verifica se os ids existem
@@ -154,12 +162,17 @@ namespace LojaVeiculos.Controllers
                 });
             }
         }
-        
-        
+
+
         /// <summary>
-        /// Altera os dados parcialmente
+        /// Altera parcialmente os dados de um administrador
         /// </summary>
-        /// <returns>Dados alterados</returns>
+        /// <param name="id">Id do administrador</param>
+        /// <param name="patch">Objeto com os dados do administrador que serão alterados</param>
+        /// <returns>Mensagem("Dados alterados com sucesso" se a alteração foi realizada com sucesso, 
+        ///          BAD REQUEST se o id não foi informado no corpo do objeto ou se o id informado e o id do administrador forem diferentes,
+        ///          NOT FOUND se o administrador não foi encontrado,
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpPatch("{id}")]
         [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Patch(int id, [FromBody] JsonPatchDocument patchUsuario)
@@ -181,11 +194,12 @@ namespace LojaVeiculos.Controllers
 
 
         /// <summary>
-        /// Deleta todos dados de um usuário
+        /// Exclui um administrador
         /// </summary>
-        /// <param name="id">Id do usuário</param>
-        /// <returns>Mensagem de exclusão</returns>
-
+        /// <param name="id">Id do administrador</param>
+        /// <returns>Mensagem("Registro excluído com sucesso" se a exclusão foi realizada com sucesso, 
+        ///          NOT FOUND se o administrador não foi encontrado,
+        ///          Erro 500 se deu falha na transação</returns>
         [HttpDelete("{id}")]
         [Authorize(Roles = "ADMINISTRADOR")]
         public IActionResult Excluir(int id)

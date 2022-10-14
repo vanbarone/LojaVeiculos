@@ -1,6 +1,13 @@
-# 💻 LojaVeiculos - Desafio do programa Entry Point BRQ!
+# 💻 BuyCar - Desafio do programa Entry Point BRQ!
 
 Serviço de compra online de veículos
+
+# 🖱 Tecnologias Usadas:
+- EntityFramework
+- CodeFirst
+- Autenticação com JWT
+- Azure
+- Sql Server
 
 # ✋🏻 Requisitos Funcionais:
 - Conter um cadastro de usuário com: Nome, Sobrenome, CPF, Celular,Email e Senha, Aceite dos termos de uso;
@@ -12,5 +19,6 @@ Serviço de compra online de veículos
 - As compras realizadas deverão ser registradas na base de dados para futurasconsultas;
 - Deverá conter uma lista e busca de concessionárias, com nome, endereço(s),telefone(s) e site;Deverá conter uma busca por placas de veículos registrados na aplicação;
 
+# 👩🏻‍💻 Diagrama de Classe:
 
-TESTAR
+![Diagrama de Classes-Logico drawio](https://user-images.githubusercontent.com/61742539/195747799-3e8bb724-3aad-43ef-8558-1a939af191c7.png)
